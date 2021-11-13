@@ -1,0 +1,31 @@
+<Project>
+	<PropertyGroup>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageProjectUrl>https://github.com/ezequias2d/peridot</PackageProjectUrl>
+		<Copyright>ezequias2d and Peridot contributors.</Copyright>
+		<Version>0.1.0-alpha</Version>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageOutputPath>..\build\nupkgs</PackageOutputPath>
+		<PackageIcon>peridot.png</PackageIcon>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>Peridot 3D 2D SpriteBranch Game Sprite Veldrid Direct3D DirectX Vulkan OpenGL Metal</PackageTags>
+		<NeutralLanguage>en</NeutralLanguage>
+		<RepositoryUrl>https://github.com/ezequias2d/peridot</RepositoryUrl>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+		<IncludeSymbols>true</IncludeSymbols>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\build\peridot.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+</Project>

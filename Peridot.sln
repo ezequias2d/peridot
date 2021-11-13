@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Peridot", "src\Peridot\Peridot.csproj", "{25280CCF-69F0-4997-83BD-8921182BDCBE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Peridot.Veldrid", "src\Peridot.Veldrid\Peridot.Veldrid.csproj", "{06D982B2-97D8-4C38-9837-50D2EA5E050D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Peridot.Demo", "src\Peridot.Demo\Peridot.Demo.csproj", "{2B5DA501-2051-4045-A3C7-B5E9C74DE7ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F5D6FEB2-6E90-4034-83E4-78BCA8EDDA25}"
+	ProjectSection(SolutionItems) = preProject
+		src\build\common.props.csproj = src\build\common.props.csproj
+		src\build\peridot.png = src\build\peridot.png
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25280CCF-69F0-4997-83BD-8921182BDCBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25280CCF-69F0-4997-83BD-8921182BDCBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25280CCF-69F0-4997-83BD-8921182BDCBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25280CCF-69F0-4997-83BD-8921182BDCBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06D982B2-97D8-4C38-9837-50D2EA5E050D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06D982B2-97D8-4C38-9837-50D2EA5E050D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06D982B2-97D8-4C38-9837-50D2EA5E050D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06D982B2-97D8-4C38-9837-50D2EA5E050D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B5DA501-2051-4045-A3C7-B5E9C74DE7ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B5DA501-2051-4045-A3C7-B5E9C74DE7ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B5DA501-2051-4045-A3C7-B5E9C74DE7ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B5DA501-2051-4045-A3C7-B5E9C74DE7ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {283E4FA4-87D7-4804-B948-D717D1157195}
+	EndGlobalSection
+EndGlobal

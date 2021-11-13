@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Description>A generic SpriteBranch abstract class for optimized rendering.
+
+Peridot.Veldrid implements this with the Veldrid.</Description>
+  </PropertyGroup>
+
+  <Import Project="..\build\common.props.csproj" />
+
+</Project>
