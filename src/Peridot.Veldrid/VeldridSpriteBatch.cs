@@ -30,8 +30,8 @@ namespace Peridot.Veldrid
         /// <param name="outputDescription">The output description of target framebuffer.</param>
         /// <param name="shaders">The shaders to use to render. Uses <seealso cref="LoadDefaultShaders(GraphicsDevice)"/> for default.</param>
         /// <param name="sampler">The samppler used to sample.</param>
-        public VeldridSpriteBatch(GraphicsDevice device, 
-            OutputDescription outputDescription, 
+        public VeldridSpriteBatch(GraphicsDevice device,
+            OutputDescription outputDescription,
             Shader[] shaders,
             Sampler? sampler = null,
             BlendStateDescription? blendState = null,
@@ -64,7 +64,7 @@ namespace Peridot.Veldrid
             {
                 var texture = item.Key;
                 var group = item.Value;
-                
+
                 var pair = GetBuffer(texture, group.Count + matrixSize);
                 var mapped = _device.Map(pair.buffer, MapMode.Write);
 
@@ -94,7 +94,7 @@ namespace Peridot.Veldrid
                 pair.textureSet = _device.ResourceFactory.CreateResourceSet(new ResourceSetDescription(_resourceLayouts[1], texture, _sampler));
                 _buffers[texture] = pair;
             }
-            else if(size > pair.buffer.SizeInBytes)
+            else if (size > pair.buffer.SizeInBytes)
             {
                 pair.set.Dispose();
                 pair.buffer.Dispose();
@@ -111,7 +111,7 @@ namespace Peridot.Veldrid
         /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
-            if(disposing)
+            if (disposing)
             {
                 _vertexBuffer.Dispose();
             }
@@ -149,7 +149,7 @@ namespace Peridot.Veldrid
                 new("Items", ResourceKind.StructuredBufferReadOnly, ShaderStages.Vertex),
             };
             var rld = new ResourceLayoutDescription(elements);
-            
+
             layouts[0] = device.ResourceFactory.CreateResourceLayout(rld);
 
             elements = new ResourceLayoutElementDescription[]
@@ -163,7 +163,7 @@ namespace Peridot.Veldrid
             return layouts;
         }
 
-        private static Pipeline CreatePipeline(GraphicsDevice device, 
+        private static Pipeline CreatePipeline(GraphicsDevice device,
             OutputDescription outputDescription,
             BlendStateDescription blendState,
             DepthStencilStateDescription depthStencil,
@@ -191,7 +191,7 @@ namespace Peridot.Veldrid
                     specializations: new[] { new SpecializationConstant(0, device.IsClipSpaceYInverted) }),
                 Outputs = outputDescription,
             };
-            
+
             return device.ResourceFactory.CreateGraphicsPipeline(pipelineDescription);
         }
 
