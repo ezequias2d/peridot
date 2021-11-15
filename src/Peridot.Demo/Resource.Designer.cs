@@ -61,12 +61,22 @@ namespace Peridot.Demo {
         }
         
         /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        ///   Consulta um recurso localizado do tipo System.Byte[].
         /// </summary>
-        internal static System.Drawing.Bitmap _4_2_07 {
+        internal static byte[] _4_2_07 {
             get {
                 object obj = ResourceManager.GetObject("_4_2_07", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Byte[].
+        /// </summary>
+        internal static byte[] romulus {
+            get {
+                object obj = ResourceManager.GetObject("romulus", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }
