@@ -5,16 +5,27 @@
 
 using Peridot.Veldrid;
 using System.Drawing;
-using System.Drawing.Imaging;
 using Veldrid;
 using Veldrid.StartupUtilities;
 using System.Numerics;
 using Peridot.Demo;
-using Ez.Numerics;
+
+using Font = Peridot.Veldrid.Font;
+using StbImageSharp;
+using System.Diagnostics;
 
 var title = "Peridot.Demo";
 var wci = new WindowCreateInfo(100, 100, 640, 480, WindowState.Normal, title);
-VeldridStartup.CreateWindowAndGraphicsDevice(wci, out var window, out var gd);
+
+var window = VeldridStartup.CreateWindow(wci);
+var gd = VeldridStartup.CreateVulkanGraphicsDevice(
+    new(true,
+        Veldrid.PixelFormat.D24_UNorm_S8_UInt,
+        true, 
+        ResourceBindingModel.Default,
+        true,
+        true),
+    window);
 
 window.Resized += () =>
 {
@@ -23,9 +34,11 @@ window.Resized += () =>
 
 var shaders = VeldridSpriteBatch.LoadDefaultShaders(gd);
 var sb = new VeldridSpriteBatch(gd, gd.MainSwapchain.Framebuffer.OutputDescription, shaders);
+var tr = new TextRenderer(gd, sb);
 var cl = gd.ResourceFactory.CreateCommandList();
 var fence = gd.ResourceFactory.CreateFence(false);
 var texture = LoadTexture(Resource._4_2_07);
+var font = LoadFont(Resource.romulus);
 var count = 0;
 
 var time = DateTime.Now;
@@ -47,13 +60,13 @@ while (window.Exists)
 
     sb.Begin();
     sb.ViewMatrix = Matrix4x4.CreateOrthographic(window.Width, window.Height, 0.01f, 1000f);
-    //ref var item = ref sb.Draw(texture);
+    
     var size = new Vector2(texture.Width, texture.Height);
     var pos = size * -0.5f;
-    var source = new System.Drawing.Rectangle(0, 0, (int)texture.Width, (int)texture.Height);
+    var source = new System.Drawing.Rectangle(0, 0, (int)texture.Width / 2, (int)texture.Height / 2);
 
-    //item = new(pos, size, source, Color.White, 0f, Vector2.Zero, Vector2.One, 1);
-    sb.Draw(texture, default, source, Color.White, EzMath.Deg2Rad * count / 1000, size * 0.5f, Vector2.One, 1);
+    sb.Draw(texture, default, source, Color.White, 0, size * 0.5f, Vector2.One, 1);
+    tr.DrawString(font, 32, "Hello World!", new Vector2(1, 1), Color.White, 0, new Vector2(0, 0), new Vector2(1), 1);
     sb.End();
 
     cl.Begin();
@@ -68,29 +81,33 @@ while (window.Exists)
     gd.SwapBuffers();
 }
 
-Texture LoadTexture(Bitmap image)
+Texture LoadTexture(byte[] data)
 {
-
-    var texture = gd.ResourceFactory.CreateTexture(new()
+    ImageResult image;
     {
-        Format = Veldrid.PixelFormat.B8_G8_R8_A8_UNorm,
-        Height = (uint)image.Height,
-        Width = (uint)image.Width,
-        Depth = 1,
-        ArrayLayers = 1,
-        MipLevels = 1,
-        SampleCount = TextureSampleCount.Count1,
-        Type = TextureType.Texture2D,
-        Usage = TextureUsage.Sampled,
-    });
-    image.RotateFlip(RotateFlipType.RotateNoneFlipY);
-    image = image.Clone(new(0, 0, image.Width, image.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        image = ImageResult.FromMemory(data, ColorComponents.Default);
+        Debug.Assert(image != null);
+    }
 
-    var data = image.LockBits(new(default, new(image.Width, image.Height)), ImageLockMode.ReadOnly, image.PixelFormat);
-    var size = (uint)(data.Stride * data.Height);
-    gd.UpdateTexture(texture, data.Scan0, size, 0, 0, 0, (uint)image.Width, (uint)image.Height, 1, 0, 0);
+    var td = new TextureDescription(
+        (uint)image.Width, (uint)image.Height, 1,
+        1, 1,
+        PixelFormat.R8_G8_B8_A8_UNorm,
+        TextureUsage.Sampled,
+        TextureType.Texture2D);
 
-    image.UnlockBits(data);
+    var texture = gd.ResourceFactory.CreateTexture(td);
+    gd.UpdateTexture(texture, image.Data, 0, 0, 0, td.Width, td.Height, td.Depth, 0, 0);
 
     return texture;
+}
+
+Font LoadFont(byte[] data)
+{
+    using var stream = new MemoryStream();
+    stream.Write(data);
+    stream.Position = 0;
+    var font = new Font();
+    font.AddFont(data);
+    return font;
 }
