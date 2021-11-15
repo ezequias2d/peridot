@@ -27,7 +27,7 @@ void main()
 
     gl_Position = item.projection * view * item.model * vec4(Position, 0, 1);
 
-    if(InvertY)
+    if(!InvertY)
         gl_Position.y = -gl_Position.y;
 
     fsin_Color = item.color;

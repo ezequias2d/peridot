@@ -30,14 +30,25 @@ namespace Peridot.Veldrid
         /// <param name="outputDescription">The output description of target framebuffer.</param>
         /// <param name="shaders">The shaders to use to render. Uses <seealso cref="LoadDefaultShaders(GraphicsDevice)"/> for default.</param>
         /// <param name="sampler">The samppler used to sample.</param>
-        public VeldridSpriteBatch(GraphicsDevice device, OutputDescription outputDescription, Shader[] shaders, Sampler? sampler = null) : base()
+        public VeldridSpriteBatch(GraphicsDevice device, 
+            OutputDescription outputDescription, 
+            Shader[] shaders,
+            Sampler? sampler = null,
+            BlendStateDescription? blendState = null,
+            DepthStencilStateDescription? depthStencil = null) : base()
         {
             _sampler = sampler ?? device.LinearSampler;
             _device = device;
             _vertexBuffer = CreateVertexBuffer(device);
             _resourceLayouts = CreateResourceLayouts(device);
-            _pipeline = CreatePipeline(device, outputDescription, shaders, _resourceLayouts);
             _buffers = new();
+
+            var bs = blendState ?? BlendStateDescription.SingleAlphaBlend;
+            var ds = depthStencil ?? new(
+                depthTestEnabled: true,
+                depthWriteEnabled: true,
+                comparisonKind: ComparisonKind.LessEqual);
+            _pipeline = CreatePipeline(device, outputDescription, bs, ds, shaders, _resourceLayouts);
         }
 
         /// <summary>
@@ -152,20 +163,22 @@ namespace Peridot.Veldrid
             return layouts;
         }
 
-        private static Pipeline CreatePipeline(GraphicsDevice device, OutputDescription outputDescription, Shader[] shaders, params ResourceLayout[] layouts)
+        private static Pipeline CreatePipeline(GraphicsDevice device, 
+            OutputDescription outputDescription,
+            BlendStateDescription blendState,
+            DepthStencilStateDescription depthStencil,
+            Shader[] shaders,
+            params ResourceLayout[] layouts)
         {
             var vertexLayout = new VertexLayoutDescription(
                 new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2));
 
             var pipelineDescription = new GraphicsPipelineDescription
             {
-                BlendState = BlendStateDescription.SingleOverrideBlend,
-                DepthStencilState = new(
-                    depthTestEnabled: true,
-                    depthWriteEnabled: true,
-                    comparisonKind: ComparisonKind.LessEqual),
+                BlendState = blendState,
+                DepthStencilState = depthStencil,
                 RasterizerState = new(
-                    cullMode: FaceCullMode.Back | FaceCullMode.Front,
+                    cullMode: FaceCullMode.Back,
                     fillMode: PolygonFillMode.Solid,
                     frontFace: FrontFace.Clockwise,
                     depthClipEnabled: false,
