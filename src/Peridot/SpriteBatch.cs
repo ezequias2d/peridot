@@ -11,7 +11,7 @@ namespace Peridot
     /// A class for drawing sprites in one or more optimized batches.
     /// </summary>
     /// <typeparam name="TTexture">The texture type to renderer.</typeparam>
-    public abstract class SpriteBatch<TTexture> : IDisposable where TTexture : notnull, ITexture2D
+    public abstract class SpriteBatch<TTexture> : ISpriteBatch<TTexture> where TTexture : notnull, ITexture2D
     {
         /// <summary>
         /// The batcher with all entities to renderer.
@@ -46,7 +46,7 @@ namespace Peridot
         /// Begins the sprite branch.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown if <see cref="Begin"/> is called next time without previous <see cref="End"/>.</exception>
-        public virtual void Begin()
+        public void Begin()
         {
             if (_beginCalled)
                 throw new InvalidOperationException("Begin cannot be called again until End has been successfully called.");
@@ -60,7 +60,7 @@ namespace Peridot
         /// Flushes all batched text and sprites to the screen.
         /// </summary>
         /// <exception cref="InvalidOperationException">This command should be called after <see cref="Begin"/> and drawing commands.</exception>
-        public virtual void End()
+        public void End()
         {
             if (!_beginCalled)
                 throw new InvalidOperationException("Begin must be called before calling End.");
@@ -68,173 +68,32 @@ namespace Peridot
             _beginCalled = false;
         }
 
-        private ref BatchItem Draw(TTexture texture)
-        {
-            return ref _batcher.Add(texture);
-        }
+        /// <inheritdoc/>
+        public void Draw(ITexture2D texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, float layerDepth) =>
+            Draw(SpriteBatch<TTexture>.Cast(texture), destinationRectangle, sourceRectangle, color, rotation, origin, layerDepth);
 
-        /// <summary>
-        /// Submit sprite draw in the batch.
-        /// </summary>
-        /// <param name="texture">The source texture.</param>
-        /// <param name="position">The drawing location on screen.</param>
-        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
-        /// <param name="color">Color multiplier.</param>
-        /// <param name="rotation">The rotation of the sprite.</param>
-        /// <param name="origin">Sprite center.</param>
-        /// <param name="scale">A scaling of this sprite.</param>
-        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-		public void Draw(TTexture texture,
-                Vector2 position,
-                Rectangle? sourceRectangle,
-                Color color,
-                float rotation,
-                Vector2 origin,
-                Vector2 scale,
-                float layerDepth)
+        /// <inheritdoc/>
+        public void Draw(ITexture2D texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, float layerDepth) =>
+            Draw(SpriteBatch<TTexture>.Cast(texture), position, sourceRectangle, color, rotation, origin, scale, layerDepth);
+
+        /// <inheritdoc/>
+        public void Draw(TTexture texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, float layerDepth)
         {
             CheckValid(texture);
+            ref var item = ref _batcher.Add(texture);
 
-            ref var item = ref Draw(texture);
-            
-            var size = texture.Size;
-            var srcRect = sourceRectangle ?? new(0, 0, (int)size.X, (int)size.Y);
-            item = new(size, position, srcRect, color, rotation, origin, scale, layerDepth);
+            var size = new Vector2(texture.Size.Width, texture.Size.Height);
+            item = new(size, destinationRectangle, sourceRectangle, color, rotation, origin, layerDepth);
         }
 
-        /// <summary>
-        /// Submit a sprite for drawing in the current batch.
-        /// </summary>
-        /// <param name="texture">The source texture.</param>
-        /// <param name="position">The drawing location on screen.</param>
-        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
-        /// <param name="color">Color multiplier.</param>
-        /// <param name="rotation">A rotation of this sprite.</param>
-        /// <param name="origin">Sprite center.</param>
-        /// <param name="scale">A scaling of this sprite.</param>
-        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-		public void Draw(TTexture texture,
-                Vector2 position,
-                Rectangle? sourceRectangle,
-                Color color,
-                float rotation,
-                Vector2 origin,
-                float scale,
-                float layerDepth)
-        {
-            var scaleVec = new Vector2(scale, scale);
-            Draw(texture, position, sourceRectangle, color, rotation, origin, scaleVec, layerDepth);
-        }
-
-        /// <summary>
-        /// Submit a sprite for drawing in the current batch.
-        /// </summary>
-        /// <param name="texture">The source texture.</param>
-        /// <param name="destinationRectangle">The drawing bounds on screen.</param>
-        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
-        /// <param name="color">Color multiplier.</param>
-        /// <param name="rotation">A rotation of this sprite.</param>
-        /// <param name="origin">Sprite center.</param>
-        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-		public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
-            Color color,
-            float rotation,
-            Vector2 origin,
-            float layerDepth)
+        /// <inheritdoc/>
+        public void Draw(TTexture texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, float layerDepth)
         {
             CheckValid(texture);
+            ref var item = ref _batcher.Add(texture);
 
-            ref var item = ref Draw(texture);
-
-            var size = texture.Size;
-            var srcRect = sourceRectangle ?? new(0, 0, (int)size.X, (int)size.Y);
-            item = new(size, destinationRectangle, srcRect, color, rotation, origin, layerDepth);
-        }
-
-        /// <summary>
-        /// Submit a sprite for drawing in the current batch.
-        /// </summary>
-        /// <param name="texture">The source texture.</param>
-        /// <param name="position">The drawing location on screen.</param>
-        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
-        /// <param name="color">Color multiplier.</param>
-        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-        public void Draw(TTexture texture,
-            Vector2 position, 
-            Rectangle? sourceRectangle,
-            Color color,
-            float layerDepth)
-        {
-            CheckValid(texture);
-
-            ref var item = ref Draw(texture);
-
-            var size = texture.Size;
-            var srcRect = sourceRectangle ?? new(0, 0, (int)size.X, (int)size.Y);
-            item = new(size, position, srcRect, color, layerDepth);
-        }
-
-        /// <summary>
-        /// Submit a sprite for drawing in the current batch.
-        /// </summary>
-        /// <param name="texture">The source texture.</param>
-        /// <param name="destinationRectangle">The drawing bounds on screen.</param>
-        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
-        /// <param name="color">Color multiplier.</param>
-        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-        public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle, 
-            Color color, 
-            float layerDepth)
-        {
-            CheckValid(texture);
-
-            ref var item = ref Draw(texture);
-
-            var size = texture.Size;
-            var srcRect = sourceRectangle ?? new(0, 0, (int)size.X, (int)size.Y);
-            item = new(size, destinationRectangle, srcRect, color, layerDepth);
-        }
-
-        /// <summary>
-        /// Submit a sprite for drawing in the current batch.
-        /// </summary>
-        /// <param name="texture">The source texture.</param>
-        /// <param name="position">The drawing location on screen.</param>
-        /// <param name="color">Color multiplier.</param>
-        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-        public void Draw(TTexture texture, 
-            Vector2 position, 
-            Color color,
-            float layerDepth)
-        {
-            CheckValid(texture);
-
-            ref var item = ref Draw(texture);
-
-            var size = texture.Size;
-            item = new(size, position, color, layerDepth);
-        }
-
-        /// <summary>
-        /// Submit a sprite for drawing in the current batch.
-        /// </summary>
-        /// <param name="texture">The source texture.</param>
-        /// <param name="destinationRectangle">The drawing bounds on screen.</param>
-        /// <param name="color">Color multiplier.</param>
-        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-        public void Draw(TTexture texture, 
-            Rectangle destinationRectangle, 
-            Color color,
-            float layerDepth)
-        {
-            CheckValid(texture);
-
-            ref var item = ref Draw(texture);
-            item = new(destinationRectangle, color, layerDepth);
+            var size = new Vector2(texture.Size.Width, texture.Size.Height);
+            item = new(size, position, sourceRectangle, color, rotation, origin, scale, layerDepth);
         }
 
         /// <inheritdoc/>
@@ -250,12 +109,19 @@ namespace Peridot
         /// <param name="disposing">If called by <see cref="Dispose()"/></param>
         protected abstract void Dispose(bool disposing);
 
-        private void CheckValid(TTexture texture)
+        private void CheckValid(ITexture2D texture)
         {
             if (texture == null)
                 throw new ArgumentNullException(nameof(texture));
             if (!_beginCalled)
                 throw new InvalidOperationException("Draw was called, but Begin has not yet been called. Begin must be called successfully before you can call Draw.");
+        }
+
+        private static TTexture Cast(ITexture2D texture)
+        {
+            if (texture is not TTexture tt)
+                throw new InvalidCastException($"The {texture} is not supported by this implementation.");
+            return tt;
         }
     }
 }
