@@ -6,8 +6,13 @@ namespace Peridot
     /// <summary>
     /// Represents an interface to a text renderer.
     /// </summary>
-    public interface ITextRenderer
+    public interface ITextRenderer : IDisposable
     {
+        /// <summary>
+        /// A bool indicating whether this instance has been disposed.
+        /// </summary>
+        public bool IsDisposed { get; }
+
         /// <summary>
         /// Submit a text string for drawing.
         /// </summary>
