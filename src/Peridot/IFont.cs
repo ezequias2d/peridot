@@ -8,6 +8,11 @@ namespace Peridot
     public interface IFont : IDisposable
     {
         /// <summary>
+        /// A bool indicating whether this instance has been disposed.
+        /// </summary>
+        public bool IsDisposed { get; }
+
+        /// <summary>
         /// Gets the size of a string when rendered in this font.
         /// </summary>
         /// <param name="text">The text to measure.</param>

@@ -27,6 +27,7 @@ namespace Peridot
         {
             _batcher = new();
             _beginCalled = false;
+            IsDisposed = false;
         }
 
         /// <summary>
@@ -34,13 +35,16 @@ namespace Peridot
         /// </summary>
         ~SpriteBatch()
         {
-            Dispose(false);
+            CoreDispose(false);
         }
 
         /// <summary>
         /// The view matrix to use to renderer.
         /// </summary>
         public Matrix4x4 ViewMatrix { get; set; }
+
+        /// <inheritdoc/>
+        public bool IsDisposed { get; protected set; }
 
         /// <summary>
         /// Begins the sprite branch.
@@ -99,8 +103,17 @@ namespace Peridot
         /// <inheritdoc/>
         public void Dispose() 
         {
-            Dispose(true);
+            CoreDispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        private void CoreDispose(bool disposing)
+        {
+            if (IsDisposed)
+                return;
+            IsDisposed = true;
+
+            Dispose(disposing);
         }
 
         /// <summary>

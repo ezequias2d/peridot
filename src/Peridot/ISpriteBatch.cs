@@ -13,6 +13,11 @@ namespace Peridot
     public interface ISpriteBatch : IDisposable
     {
         /// <summary>
+        /// A bool indicating whether this instance has been disposed.
+        /// </summary>
+        public bool IsDisposed { get; }
+
+        /// <summary>
         /// The view matrix to use to renderer.
         /// </summary>
         public Matrix4x4 ViewMatrix { get; set; }
