@@ -10,14 +10,6 @@ namespace Peridot
 {
     public struct BatchItem
     {
-        public BatchItem(RectangleF uvRectangle, RectangleF destination, float rotation = 0, Vector2 origin = default, float depth = 0)
-        {
-            UV = ToMatrix(uvRectangle);
-            Color = new(1f);
-            Model = ToMatrix(destination, rotation, origin) * Matrix4x4.CreateTranslation(0, 0, depth);
-            Projection = Matrix4x4.Identity;
-        }
-
         public BatchItem(
                 Vector2 textureSize,
                 Vector2 position,
@@ -31,12 +23,11 @@ namespace Peridot
             origin *= scale;
 
             var sourceSize = new Vector2(sourceRectangle.Width, sourceRectangle.Height) / textureSize;
-            var pos = new Vector2(sourceRectangle.X, sourceRectangle.Y);
-
-            UV = Matrix4x4.CreateTranslation(new(pos, 0)) * Matrix4x4.CreateScale(new Vector3(sourceSize, 1));
+            var srcPos = new Vector2(sourceRectangle.X, sourceRectangle.Y) / textureSize;
+            UV = Matrix4x4.CreateScale(new Vector3(sourceSize, 1)) * Matrix4x4.CreateTranslation(new(srcPos, 0));
             Color = ToVector(color);
             Model =
-                Matrix4x4.CreateScale(new Vector3(textureSize * scale, 0)) *
+                Matrix4x4.CreateScale(new Vector3(new Vector2(sourceRectangle.Width, sourceRectangle.Height) * scale, 1)) *
                 Matrix4x4.CreateTranslation(new Vector3(-origin, 0)) *
                 Matrix4x4.CreateRotationZ(rotation) *
                 Matrix4x4.CreateTranslation(new Vector3(position, layerDepth));
@@ -54,71 +45,12 @@ namespace Peridot
             var sourceSize = new Vector2(sourceRectangle.Width, sourceRectangle.Height) / textureSize;
             var pos = new Vector2(sourceRectangle.X, sourceRectangle.Y);
 
-            UV = Matrix4x4.CreateTranslation(new(pos, 0)) * Matrix4x4.CreateScale(new Vector3(sourceSize, 1));
+            UV = Matrix4x4.CreateScale(new Vector3(sourceSize, 1)) * Matrix4x4.CreateTranslation(new(pos, 0));
             Color = ToVector(color);
             Model =
                 Matrix4x4.CreateScale(new Vector3(destinationRectangle.Width, destinationRectangle.Height, 0)) *
                 Matrix4x4.CreateTranslation(new Vector3(-origin, 0)) *
                 Matrix4x4.CreateRotationZ(rotation) *
-                Matrix4x4.CreateTranslation(new Vector3(destinationRectangle.X, destinationRectangle.Y, layerDepth));
-            Projection = Matrix4x4.Identity;
-        }
-
-        public BatchItem(Vector2 textureSize,
-            Vector2 position,
-            Rectangle sourceRectangle,
-            Color color,
-            float layerDepth)
-        {
-            var sourceSize = new Vector2(sourceRectangle.Width, sourceRectangle.Height) / textureSize;
-            var pos = new Vector2(sourceRectangle.X, sourceRectangle.Y);
-
-            UV = Matrix4x4.CreateTranslation(new(pos, 0)) * Matrix4x4.CreateScale(new Vector3(sourceSize, 1));
-            Color = ToVector(color);
-            Model =
-                Matrix4x4.CreateScale(new Vector3(sourceRectangle.Width, sourceRectangle.Height, 0)) *
-                Matrix4x4.CreateTranslation(new Vector3(position.X, position.Y, layerDepth));
-            Projection = Matrix4x4.Identity;
-        }
-
-        public BatchItem(Vector2 textureSize,
-            Rectangle destinationRectangle,
-            Rectangle sourceRectangle,
-            Color color,
-            float layerDepth)
-        {
-            var sourceSize = new Vector2(sourceRectangle.Width, sourceRectangle.Height) / textureSize;
-            var pos = new Vector2(sourceRectangle.X, sourceRectangle.Y);
-
-            UV = Matrix4x4.CreateTranslation(new(pos, 0)) * Matrix4x4.CreateScale(new Vector3(sourceSize, 1));
-            Color = ToVector(color);
-            Model =
-                Matrix4x4.CreateScale(new Vector3(destinationRectangle.Width, destinationRectangle.Height, 0)) *
-                Matrix4x4.CreateTranslation(new Vector3(destinationRectangle.X, destinationRectangle.Y, layerDepth));
-            Projection = Matrix4x4.Identity;
-        }
-
-        public BatchItem(Vector2 textureSize,
-            Vector2 position,
-            Color color,
-            float layerDepth)
-        {
-            UV = Matrix4x4.Identity;
-            Color = ToVector(color);
-            Model =
-                Matrix4x4.CreateScale(new Vector3(textureSize.X, textureSize.Y, 0)) *
-                Matrix4x4.CreateTranslation(new Vector3(position.X, position.Y, layerDepth));
-            Projection = Matrix4x4.Identity;
-        }
-
-        public BatchItem(Rectangle destinationRectangle,
-            Color color,
-            float layerDepth)
-        {
-            UV = Matrix4x4.Identity;
-            Color = ToVector(color);
-            Model =
-                Matrix4x4.CreateScale(new Vector3(destinationRectangle.Width, destinationRectangle.Height, 0)) *
                 Matrix4x4.CreateTranslation(new Vector3(destinationRectangle.X, destinationRectangle.Y, layerDepth));
             Projection = Matrix4x4.Identity;
         }
