@@ -47,7 +47,7 @@ namespace Peridot.Veldrid
             var ds = depthStencil ?? new(
                 depthTestEnabled: true,
                 depthWriteEnabled: true,
-                comparisonKind: ComparisonKind.LessEqual);
+                comparisonKind: ComparisonKind.GreaterEqual);
             _pipeline = CreatePipeline(device, outputDescription, bs, ds, shaders, _resourceLayouts);
         }
 
@@ -181,7 +181,7 @@ namespace Peridot.Veldrid
                     cullMode: FaceCullMode.Back,
                     fillMode: PolygonFillMode.Solid,
                     frontFace: FrontFace.Clockwise,
-                    depthClipEnabled: false,
+                    depthClipEnabled: true,
                     scissorTestEnabled: false),
                 PrimitiveTopology = PrimitiveTopology.TriangleStrip,
                 ResourceLayouts = layouts,
