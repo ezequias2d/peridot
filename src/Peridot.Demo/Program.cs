@@ -18,10 +18,10 @@ var title = "Peridot.Demo";
 var wci = new WindowCreateInfo(100, 100, 640, 480, WindowState.Normal, title);
 
 var window = VeldridStartup.CreateWindow(wci);
-var gd = VeldridStartup.CreateVulkanGraphicsDevice(
+var gd = VeldridStartup.CreateDefaultD3D11GraphicsDevice(
     new(true,
-        Veldrid.PixelFormat.D24_UNorm_S8_UInt,
-        true, 
+        Veldrid.PixelFormat.D32_Float_S8_UInt,
+        true,
         ResourceBindingModel.Default,
         true,
         true),
@@ -59,19 +59,20 @@ while (window.Exists)
     window.PumpEvents();
 
     sb.Begin();
-    sb.ViewMatrix = Matrix4x4.CreateOrthographic(window.Width, window.Height, 0.01f, 1000f);
+    sb.ViewMatrix = Matrix4x4.CreateOrthographic(window.Width, window.Height, 0.01f, -100f);
     
     var size = new Vector2(texture.Width, texture.Height);
     var pos = size * -0.5f;
     var source = new System.Drawing.Rectangle(0, 0, (int)texture.Width / 2, (int)texture.Height / 2);
 
-    sb.Draw(texture, default, source, Color.White, 0, size * 0.5f, Vector2.One, 1);
-    tr.DrawString(font, 32, "Hello World!", new Vector2(1, 1), Color.White, 0, new Vector2(0, 0), new Vector2(1), 1);
+    sb.Draw(texture, default, source, Color.White, 0, new(-size.X / 6, 0), Vector2.One, 1f);
+    tr.DrawString(font, 32, "Hello World!", new Vector2(1, 1), Color.White, 0, new Vector2(0, 0), new Vector2(1), 0f);
     sb.End();
 
     cl.Begin();
     cl.SetFramebuffer(gd.SwapchainFramebuffer);
     cl.ClearColorTarget(0, RgbaFloat.CornflowerBlue);
+    cl.ClearDepthStencil(0f);
     sb.DrawBatch(cl);
     cl.End();
 
