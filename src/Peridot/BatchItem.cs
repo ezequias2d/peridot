@@ -43,7 +43,7 @@ namespace Peridot
             float layerDepth)
         {
             var sourceSize = new Vector2(sourceRectangle.Width, sourceRectangle.Height) / textureSize;
-            var pos = new Vector2(sourceRectangle.X, sourceRectangle.Y);
+            var pos = new Vector2(sourceRectangle.X, sourceRectangle.Y) / textureSize;
 
             UV = Matrix4x4.CreateScale(new Vector3(sourceSize, 1)) * Matrix4x4.CreateTranslation(new(pos, 0));
             Color = ToVector(color);

@@ -63,7 +63,7 @@ while (window.Exists)
     
     var size = new Vector2(texture.Width, texture.Height);
     var pos = size * -0.5f;
-    var source = new System.Drawing.Rectangle(0, 0, (int)texture.Width / 2, (int)texture.Height / 2);
+    var source = new System.Drawing.Rectangle((int)texture.Width / 2, (int)texture.Height / 2, (int)texture.Width / 2, (int)texture.Height / 2);
 
     sb.Draw(texture, default, source, Color.White, 0, new(-size.X / 6, 0), Vector2.One, 1f);
     tr.DrawString(font, 32, "Hello World!", new Vector2(1, 1), Color.White, 0, new Vector2(0, 0), new Vector2(1), 0f);
