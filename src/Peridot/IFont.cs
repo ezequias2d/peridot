@@ -1,4 +1,7 @@
-﻿using System.Numerics;
+﻿// Copyright (c) 2021 ezequias2d <ezequiasmoises@gmail.com> and the Peridot contributors
+// This code is licensed under MIT license (see LICENSE for details)
+
+using System.Numerics;
 
 namespace Peridot
 {
