@@ -53,9 +53,14 @@ namespace Peridot.Veldrid
         }
 
         /// <inheritdoc/>
-        public void DrawString(IFont font, int fontSize, string text, Vector2 position, Color color, float roration, Vector2 origin, Vector2 scale, float layerDepth)
+        public void DrawString(IFont font, int fontSize, string text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, float layerDepth)
         {
-            DrawString(Cast(font), fontSize, text, position, color, roration, origin, scale, layerDepth);
+            DrawString(Cast(font), fontSize, text, position, color, rotation, origin, scale, layerDepth);
+        }
+
+        public void DrawString(IFont font, int fontSize, string text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, float layerDepth, Rectangle scissor)
+        {
+            DrawString(Cast(font), fontSize, text, position, color, rotation, origin, scale, layerDepth, scissor);
         }
 
         /// <inheritdoc/>

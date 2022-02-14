@@ -45,6 +45,31 @@ namespace Peridot
         /// <param name="font">The font to draw.</param>
         /// <param name="fontSize">The font size.</param>
         /// <param name="text">The text which will be drawn.</param>
+        /// <param name="position">The drawing location on screen.</param>
+        /// <param name="color">The text color.</param>
+        /// <param name="rotation">The rotation of the drawing.</param>
+        /// <param name="origin">The center of the rotation. (0, 0) for default.</param>
+        /// <param name="scale">The scaling of this drawing.</param>
+        /// <param name="layerDepth">The layer depth of this drawing.</param>
+        /// <param name="scissor">The scissor rectangle.</param>
+        public void DrawString(
+            IFont font,
+            int fontSize,
+            string text,
+            Vector2 position,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            Vector2 scale,
+            float layerDepth,
+            Rectangle scissor);
+
+        /// <summary>
+        /// Submit a text string for drawing.
+        /// </summary>
+        /// <param name="font">The font to draw.</param>
+        /// <param name="fontSize">The font size.</param>
+        /// <param name="text">The text which will be drawn.</param>
         /// <param name="position">The drawing location on screen</param>
         /// <param name="color">The text color.</param>
         public void DrawString(
@@ -55,6 +80,26 @@ namespace Peridot
             Color color)
         {
             DrawString(font, fontSize, text, position, color, 0, Vector2.Zero, Vector2.One, 0);
+        }
+
+        /// <summary>
+        /// Submit a text string for drawing.
+        /// </summary>
+        /// <param name="font">The font to draw.</param>
+        /// <param name="fontSize">The font size.</param>
+        /// <param name="text">The text which will be drawn.</param>
+        /// <param name="position">The drawing location on screen</param>
+        /// <param name="color">The text color.</param>
+        /// <param name="scissor">The scissor rectangle.</param>
+        public void DrawString(
+            IFont font,
+            int fontSize,
+            string text,
+            Vector2 position,
+            Color color,
+            Rectangle scissor)
+        {
+            DrawString(font, fontSize, text, position, color, 0, Vector2.Zero, Vector2.One, 0, scissor);
         }
 
         /// <summary>
@@ -81,6 +126,34 @@ namespace Peridot
             float layerDepth)
         {
             DrawString(font, fontSize, text, position, color, rotation, origin, new Vector2(scale), layerDepth);
+        }
+
+        /// <summary>
+        /// Submit a text string for drawing.
+        /// </summary>
+        /// <param name="font">The font to draw.</param>
+        /// <param name="fontSize">The font size.</param>
+        /// <param name="text">The text which will be drawn.</param>
+        /// <param name="position">The drawing location on screen</param>
+        /// <param name="color">The text color.</param>
+        /// <param name="rotation">The rotation of the drawing.</param>
+        /// <param name="origin">The center of the rotation. (0, 0) for default.</param>
+        /// <param name="scale">The scaling of this drawing.</param>
+        /// <param name="layerDepth">The layer depth of this drawing.</param>
+        /// <param name="scissor">The scissor rectangle.</param>
+        public void DrawString(
+            IFont font,
+            int fontSize,
+            string text,
+            Vector2 position,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            float scale,
+            float layerDepth,
+            Rectangle scissor)
+        {
+            DrawString(font, fontSize, text, position, color, rotation, origin, new Vector2(scale), layerDepth, scissor);
         }
     }
 
