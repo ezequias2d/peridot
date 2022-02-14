@@ -13,6 +13,7 @@ using Peridot.Demo;
 using Font = Peridot.Veldrid.Font;
 using StbImageSharp;
 using System.Diagnostics;
+using Rectangle = System.Drawing.Rectangle;
 
 var title = "Peridot.Demo";
 var wci = new WindowCreateInfo(100, 100, 640, 480, WindowState.Normal, title);
@@ -42,6 +43,8 @@ var font = LoadFont(Resource.romulus);
 var count = 0;
 
 var time = DateTime.Now;
+var neg = false;
+var ps = 0;
 while (window.Exists)
 {
     count++;
@@ -65,8 +68,15 @@ while (window.Exists)
     var pos = size * -0.5f;
     var source = new System.Drawing.Rectangle((int)texture.Width / 2, (int)texture.Height / 2, (int)texture.Width / 2, (int)texture.Height / 2);
 
+    ps += neg ? -1 : 1;
+    if (ps == 0 || ps == 100)
+        neg = !neg;
+
     sb.Draw(texture, default, source, Color.White, 0, new(-size.X / 6, 0), Vector2.One, 1f);
-    tr.DrawString(font, 32, "Hello World!", new Vector2(1, 1), Color.White, 0, new Vector2(0, 0), new Vector2(1), 0f);
+
+    var s = font.MeasureString("Hello World!", 32);
+    var strScissor = new Rectangle(0, 0, (int)s.X, (int)s.Y * ps / 100);
+    tr.DrawString(font, 32, "Hello World!", new Vector2(1, 1), Color.White, 0, new Vector2(0, 0), new Vector2(1), 2f, strScissor);
     sb.End();
 
     cl.Begin();

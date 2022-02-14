@@ -23,6 +23,16 @@ namespace Peridot
         public Matrix4x4 ViewMatrix { get; set; }
 
         /// <summary>
+        /// The scissor rectangle.
+        /// </summary>
+        public RectangleF Scissor { get; set; }
+
+        /// <summary>
+        /// Resets the <see cref="Scissor"/> to default value.
+        /// </summary>
+        public void ResetScissor();
+
+        /// <summary>
         /// Begins the sprite branch.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown if <see cref="Begin"/> is called next time without previous <see cref="End"/>.</exception>

@@ -28,6 +28,7 @@ namespace Peridot
             _batcher = new();
             _beginCalled = false;
             IsDisposed = false;
+            ResetScissor();
         }
 
         /// <summary>
@@ -45,6 +46,9 @@ namespace Peridot
 
         /// <inheritdoc/>
         public bool IsDisposed { get; protected set; }
+
+        /// <inheritdoc/>
+        public RectangleF Scissor { get; set; }
 
         /// <summary>
         /// Begins the sprite branch.
@@ -87,7 +91,8 @@ namespace Peridot
             ref var item = ref _batcher.Add(texture);
 
             var size = new Vector2(texture.Size.Width, texture.Size.Height);
-            item = new(size, destinationRectangle, sourceRectangle, color, rotation, origin, layerDepth);
+            item = new(size, destinationRectangle, sourceRectangle, color, rotation, origin, layerDepth, Transform(Scissor, ViewMatrix));
+
         }
 
         /// <inheritdoc/>
@@ -97,7 +102,7 @@ namespace Peridot
             ref var item = ref _batcher.Add(texture);
 
             var size = new Vector2(texture.Size.Width, texture.Size.Height);
-            item = new(size, position, sourceRectangle, color, rotation, origin, scale, layerDepth);
+            item = new(size, position, sourceRectangle, color, rotation, origin, scale, layerDepth, Transform(Scissor, ViewMatrix));
         }
 
         /// <inheritdoc/>
@@ -135,6 +140,21 @@ namespace Peridot
             if (texture is not TTexture tt)
                 throw new InvalidCastException($"The {texture} is not supported by this implementation.");
             return tt;
+        }
+
+        /// <inheritdoc/>
+        public void ResetScissor()
+        {
+            const float v = 1 << 23;
+            const float s = -(1 << 22);
+            Scissor = new RectangleF(s, s, v, v);
+        }
+
+        private static RectangleF Transform(RectangleF rect, Matrix4x4 matrix)
+        {
+            var pos = Vector4.Transform(new Vector4(rect.X, rect.Y, 0, 0), matrix);
+            var size = Vector4.Transform(new Vector4(rect.X + rect.Width, rect.Y + rect.Height, 0, 0), matrix);
+            return new(pos.X, pos.Y, size.X - pos.X, size.Y - pos.Y);
         }
     }
 }

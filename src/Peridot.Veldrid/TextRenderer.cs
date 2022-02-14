@@ -22,11 +22,18 @@ namespace Peridot.Veldrid
         }
 
         /// <inheritdoc/>
+        ~TextRenderer()
+        {
+            Dispose(false);
+        }
+
+        /// <inheritdoc/>
         public bool IsDisposed { get; private set; }
 
         /// <inheritdoc/>
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
             Dispose(true);
         }
 
@@ -55,12 +62,20 @@ namespace Peridot.Veldrid
             rf.DrawText(_textRenderer, text, position, color, scale, rotation, origin, layerDepth);
         }
 
+        /// <inheritdoc/>
+        public void DrawString(Font font, int fontSize, string text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, float layerDepth, Rectangle scissor)
+        {
+            var rf = font.FontSystem.GetFont(fontSize);
+            _textRenderer.Scissor = scissor;
+            rf.DrawText(_textRenderer, text, position, color, scale, rotation, origin, layerDepth);
+            _textRenderer.ResetScissor();
+        }
+
         private static Font Cast(IFont font)
         {
             if (font is not Font f)
                 throw new InvalidCastException($"The {font} is not supported by this implementation.");
             return f;
         }
-
     }
 }

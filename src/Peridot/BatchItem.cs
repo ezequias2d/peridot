@@ -18,7 +18,8 @@ namespace Peridot
                 float rotation,
                 Vector2 origin,
                 Vector2 scale,
-                float layerDepth)
+                float layerDepth,
+                RectangleF scissor)
         {
             origin *= scale;
 
@@ -32,6 +33,7 @@ namespace Peridot
                 Matrix4x4.CreateRotationZ(rotation) *
                 Matrix4x4.CreateTranslation(new Vector3(position, layerDepth));
             Projection = Matrix4x4.Identity;
+            Scissor = scissor;
         }
 
         public BatchItem(Vector2 textureSize, 
@@ -40,7 +42,8 @@ namespace Peridot
             Color color,
             float rotation,
             Vector2 origin,
-            float layerDepth)
+            float layerDepth,
+            RectangleF scissor)
         {
             var sourceSize = new Vector2(sourceRectangle.Width, sourceRectangle.Height) / textureSize;
             var pos = new Vector2(sourceRectangle.X, sourceRectangle.Y) / textureSize;
@@ -53,12 +56,15 @@ namespace Peridot
                 Matrix4x4.CreateRotationZ(rotation) *
                 Matrix4x4.CreateTranslation(new Vector3(destinationRectangle.X, destinationRectangle.Y, layerDepth));
             Projection = Matrix4x4.Identity;
+            Scissor = scissor;
         }
 
         public Matrix4x4 UV { get; set; }
         public Vector4 Color { get; set; }
         public Matrix4x4 Model { get; set; }
         public Matrix4x4 Projection { get; set; }
+
+        public RectangleF Scissor { get; set; }
 
         private static Matrix4x4 ToMatrix(RectangleF r) =>
             Matrix4x4.CreateScale(new Vector3(r.Width, r.Height, 1)) *
