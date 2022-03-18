@@ -4,12 +4,12 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/ezequias2d/peridot</PackageProjectUrl>
 		<Copyright>ezequias2d and Peridot contributors.</Copyright>
-		<Version>0.2.2-alpha</Version>
+		<Version>0.2.3-alpha</Version>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageOutputPath>..\build\nupkgs</PackageOutputPath>
 		<PackageIcon>peridot.png</PackageIcon>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>Peridot 3D 2D SpriteBranch Game Sprite Veldrid Direct3D DirectX Vulkan OpenGL Metal</PackageTags>
+		<PackageTags>Peridot 3D 2D SpriteBatch Game Sprite Veldrid Direct3D DirectX Vulkan OpenGL Metal</PackageTags>
 		<NeutralLanguage>en</NeutralLanguage>
 		<RepositoryUrl>https://github.com/ezequias2d/peridot</RepositoryUrl>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
