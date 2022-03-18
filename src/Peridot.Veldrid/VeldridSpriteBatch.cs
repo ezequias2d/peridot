@@ -28,10 +28,14 @@ namespace Peridot.Veldrid
         /// <param name="outputDescription">The output description of target framebuffer.</param>
         /// <param name="shaders">The shaders to use to render. Uses <seealso cref="LoadDefaultShaders(GraphicsDevice)"/> for default.</param>
         /// <param name="sampler">The samppler used to sample.</param>
+        /// <param name="cullMode">Controls which face will be culled. By default the sprite are rendered with forward normal, negatives scales can flips that normal.</param>
+        /// <param name="blendState">The blend state description for creating the pipeline.</param>
+        /// <param name="depthStencil">The depth stencil state description for creating the pipeline.</param>
         public VeldridSpriteBatch(GraphicsDevice device,
             OutputDescription outputDescription,
             Shader[] shaders,
             Sampler? sampler = null,
+            FaceCullMode cullMode = FaceCullMode.None,
             BlendStateDescription? blendState = null,
             DepthStencilStateDescription? depthStencil = null) : base()
         {
@@ -46,12 +50,12 @@ namespace Peridot.Veldrid
                 depthTestEnabled: true,
                 depthWriteEnabled: true,
                 comparisonKind: ComparisonKind.GreaterEqual);
-            _pipeline = CreatePipeline(device, outputDescription, bs, ds, shaders, _resourceLayouts);
+            _pipeline = CreatePipeline(device, outputDescription, cullMode, bs, ds, shaders, _resourceLayouts);
         }
 
         /// <summary>
         /// Draw this branch into a <see cref="CommandList"/>.
-        /// Call this after calling <see cref="SpriteBatch.End"/>
+        /// Call this after calling <see cref="SpriteBatch{TTexture}.End"/>
         /// </summary>
         /// <param name="commandList"></param>
         public void DrawBatch(CommandList commandList)
@@ -163,6 +167,7 @@ namespace Peridot.Veldrid
 
         private static Pipeline CreatePipeline(GraphicsDevice device,
             OutputDescription outputDescription,
+            FaceCullMode cullMode,
             BlendStateDescription blendState,
             DepthStencilStateDescription depthStencil,
             Shader[] shaders,
@@ -176,7 +181,7 @@ namespace Peridot.Veldrid
                 BlendState = blendState,
                 DepthStencilState = depthStencil,
                 RasterizerState = new(
-                    cullMode: FaceCullMode.Back,
+                    cullMode: cullMode,
                     fillMode: PolygonFillMode.Solid,
                     frontFace: FrontFace.Clockwise,
                     depthClipEnabled: true,
