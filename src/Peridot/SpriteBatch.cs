@@ -148,6 +148,14 @@ namespace Peridot
             Scissor = new RectangleF(s, s, v, v);
         }
 
+        /// <inheritdoc/>
+        public void IntersectScissor(RectangleF clip)
+        {
+            var scissor = Scissor;
+            scissor.Intersect(clip);
+            Scissor = scissor;
+        }
+
         private static RectangleF Transform(RectangleF rect, Matrix4x4 matrix)
         {
             var pos = Vector4.Transform(new Vector4(rect.X, rect.Y, 0, 0), matrix);

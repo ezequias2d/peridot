@@ -32,6 +32,13 @@ namespace Peridot
         public void ResetScissor();
 
         /// <summary>
+        /// Replaces the <see cref="Scissor"/> with the intersection of itself 
+        /// and the <paramref name="clip"/> rectangle.
+        /// </summary>
+        /// <param name="clip">The rectangle to intersects.</param>
+        public void IntersectScissor(RectangleF clip);
+
+        /// <summary>
         /// Begins the sprite branch.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown if <see cref="Begin"/> is called next time without previous <see cref="End"/>.</exception>
