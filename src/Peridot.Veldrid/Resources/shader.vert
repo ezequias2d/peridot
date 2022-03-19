@@ -29,12 +29,10 @@ void main()
     tex_coord = (item.source * vec4(Position, 0, 1)).xy;
     
     // scissor bounds
-    vec4 scissor = item.scissor;
-    float left = scissor.x;
-    float top = scissor.y;
-    float right = scissor.z + left;
-    float bottom = scissor.w + top;
-    bounds = vec4(left, top, right, bottom);
+    vec2 start = item.scissor.xy;
+    vec2 end = start + item.scissor.zw;
+    bounds = vec4(start, end);
+
     gl_Position = item.projection * view * item.model * vec4(Position, 0, 1);
     pos = gl_Position.xy;
 
