@@ -76,32 +76,31 @@ namespace Peridot
         }
 
         /// <inheritdoc/>
-        public void Draw(ITexture2D texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, float layerDepth) =>
-            Draw(SpriteBatch<TTexture>.Cast(texture), destinationRectangle, sourceRectangle, color, rotation, origin, layerDepth);
+        public void Draw(ITexture2D texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, SpriteOptions options, float layerDepth) =>
+            Draw(SpriteBatch<TTexture>.Cast(texture), destinationRectangle, sourceRectangle, color, rotation, origin, options, layerDepth);
 
         /// <inheritdoc/>
-        public void Draw(ITexture2D texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, float layerDepth) =>
-            Draw(SpriteBatch<TTexture>.Cast(texture), position, sourceRectangle, color, rotation, origin, scale, layerDepth);
+        public void Draw(ITexture2D texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteOptions options, float layerDepth) =>
+            Draw(SpriteBatch<TTexture>.Cast(texture), position, sourceRectangle, color, rotation, origin, scale, options, layerDepth);
 
         /// <inheritdoc/>
-        public void Draw(TTexture texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, float layerDepth)
+        public void Draw(TTexture texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, SpriteOptions options, float layerDepth)
         {
             CheckValid(texture);
             ref var item = ref _batcher.Add(texture);
 
             var size = new Vector2(texture.Size.Width, texture.Size.Height);
-            item = new(size, destinationRectangle, sourceRectangle, color, rotation, origin, layerDepth, Transform(Scissor, ViewMatrix));
-
+            item = new(size, destinationRectangle, sourceRectangle, color, rotation, origin, layerDepth, Transform(Scissor, ViewMatrix), options);
         }
 
         /// <inheritdoc/>
-        public void Draw(TTexture texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, float layerDepth)
+        public void Draw(TTexture texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteOptions options, float layerDepth)
         {
             CheckValid(texture);
             ref var item = ref _batcher.Add(texture);
 
             var size = new Vector2(texture.Size.Width, texture.Size.Height);
-            item = new(size, position, sourceRectangle, color, rotation, origin, scale, layerDepth, Transform(Scissor, ViewMatrix));
+            item = new(size, position, sourceRectangle, color, rotation, origin, scale, layerDepth, Transform(Scissor, ViewMatrix), options);
         }
 
         /// <inheritdoc/>
@@ -155,5 +154,519 @@ namespace Peridot
             var size = Vector4.Transform(new Vector4(rect.X + rect.Width, rect.Y + rect.Height, 0, 0), matrix);
             return new(pos.X, pos.Y, size.X - pos.X, size.Y - pos.Y);
         }
+
+        #region ISpriteBatch
+        /// <inheritdoc/>
+        public void Draw(ITexture2D texture,
+                Rectangle destinationRectangle,
+                Rectangle sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                float layerDepth)
+        {
+            Draw(texture, destinationRectangle, sourceRectangle, color, rotation, origin, SpriteOptions.None, layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(ITexture2D texture,
+                Vector2 position,
+                Rectangle sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                Vector2 scale,
+                float layerDepth)
+        {
+            Draw(texture, position, sourceRectangle, color, rotation, origin, scale, SpriteOptions.None, layerDepth);
+        }
+
+        /// <inheritdoc/>
+		public void Draw(ITexture2D texture,
+            Rectangle destinationRectangle,
+            Rectangle? sourceRectangle,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            SpriteOptions options,
+            float layerDepth)
+        {
+            var srcRect = sourceRectangle ?? new(0, 0, texture.Size.Width, texture.Size.Height);
+            Draw(texture, destinationRectangle, srcRect, color, rotation, origin, options, layerDepth);
+        }
+
+        /// <inheritdoc/>
+		public void Draw(ITexture2D texture,
+            Rectangle destinationRectangle,
+            Rectangle? sourceRectangle,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            float layerDepth)
+        {
+            Draw(texture, destinationRectangle, sourceRectangle, color, rotation, origin, SpriteOptions.None, layerDepth);
+        }
+
+        /// <inheritdoc/>
+		public void Draw(ITexture2D texture,
+                Vector2 position,
+                Rectangle? sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                Vector2 scale,
+                SpriteOptions options,
+                float layerDepth)
+        {
+            //var srcRect = sourceRectangle ?? new(0, 0, texture.Size.Width, texture.Size.Height);
+            Draw(texture: texture,
+                position: position,
+                sourceRectangle: sourceRectangle ?? new()
+                {
+                    X = 0,
+                    Y = 0,
+                    Width = texture.Size.Width,
+                    Height = texture.Size.Height,
+                },
+                color: color,
+                rotation: rotation,
+                origin: origin,
+                scale: scale,
+                options: options,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+		public void Draw(ITexture2D texture,
+                Vector2 position,
+                Rectangle? sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                Vector2 scale,
+                float layerDepth)
+        {
+            Draw(texture: texture,
+                position: position,
+                sourceRectangle: sourceRectangle,
+                color: color,
+                rotation: rotation,
+                origin: origin,
+                scale: scale,
+                options: SpriteOptions.None,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+		public void Draw(ITexture2D texture,
+                Vector2 position,
+                Rectangle? sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                float scale,
+                SpriteOptions options,
+                float layerDepth)
+        {
+            Draw(texture: texture,
+                position: position,
+                sourceRectangle: sourceRectangle,
+                color: color,
+                rotation: rotation,
+                origin: origin,
+                scale: new Vector2(scale),
+                options: options,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+		public void Draw(ITexture2D texture,
+                Vector2 position,
+                Rectangle? sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                float scale,
+                float layerDepth)
+        {
+            Draw(texture: texture,
+                position: position,
+                sourceRectangle: sourceRectangle,
+                color: color,
+                rotation: rotation,
+                origin: origin,
+                scale: scale,
+                options: SpriteOptions.None,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(ITexture2D texture,
+            Vector2 position,
+            Rectangle? sourceRectangle,
+            Color color,
+            SpriteOptions options,
+            float layerDepth)
+        {
+            Draw(texture: texture,
+                position: position,
+                sourceRectangle: sourceRectangle,
+                color: color,
+                rotation: 0f,
+                origin: default,
+                scale: 0f,
+                options: options,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(ITexture2D texture,
+            Vector2 position,
+            Rectangle? sourceRectangle,
+            Color color,
+            float layerDepth)
+        {
+            Draw(texture: texture,
+                position: position,
+                sourceRectangle: sourceRectangle,
+                color: color,
+                options: SpriteOptions.None,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(ITexture2D texture,
+            Rectangle destinationRectangle,
+            Rectangle? sourceRectangle,
+            Color color,
+            SpriteOptions options,
+            float layerDepth)
+        {
+            Draw(texture: texture,
+                destinationRectangle: destinationRectangle,
+                sourceRectangle: sourceRectangle,
+                color: color,
+                rotation: 0,
+                origin: default,
+                options: options,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(ITexture2D texture,
+            Rectangle destinationRectangle,
+            Rectangle? sourceRectangle,
+            Color color,
+            float layerDepth)
+        {
+            Draw(texture: texture,
+                destinationRectangle:
+                destinationRectangle,
+                sourceRectangle: sourceRectangle,
+                color: color,
+                options: SpriteOptions.None,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(ITexture2D texture,
+            Vector2 position,
+            Color color,
+            SpriteOptions options,
+            float layerDepth)
+        {
+            Draw(texture: texture,
+                position: position,
+                sourceRectangle: new Rectangle(default, texture.Size),
+                color: color,
+                rotation: 0,
+                origin: default,
+                scale: default,
+                options: options,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(ITexture2D texture,
+            Vector2 position,
+            Color color,
+            float layerDepth)
+        {
+            Draw(texture: texture,
+                position: position,
+                color: color,
+                options: SpriteOptions.None,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(ITexture2D texture,
+            Rectangle destinationRectangle,
+            Color color,
+            SpriteOptions options,
+            float layerDepth)
+        {
+            Draw(texture: texture,
+                destinationRectangle: destinationRectangle,
+                sourceRectangle: new Rectangle(default, texture.Size),
+                color: color,
+                rotation: 0,
+                origin: default,
+                options: options,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(ITexture2D texture,
+            Rectangle destinationRectangle,
+            Color color,
+            float layerDepth)
+        {
+            Draw(texture: texture,
+                destinationRectangle: destinationRectangle,
+                color: color,
+                options: SpriteOptions.None,
+                layerDepth: layerDepth);
+        }
+        #endregion
+
+        #region ISpriteBatch<TTexture>
+        
+        /// <inheritdoc/>
+        public void Draw(TTexture texture,
+                Rectangle destinationRectangle,
+                Rectangle sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                float layerDepth)
+        {
+            Draw(texture: texture,
+                destinationRectangle: destinationRectangle,
+                sourceRectangle: sourceRectangle,
+                color: color,
+                rotation: rotation,
+                origin: origin,
+                options: SpriteOptions.None,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(TTexture texture,
+                Vector2 position,
+                Rectangle sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                Vector2 scale,
+                float layerDepth)
+        {
+            Draw(texture: texture,
+                position: position,
+                sourceRectangle: sourceRectangle,
+                color: color,
+                rotation: rotation,
+                origin: origin,
+                scale: scale,
+                options: SpriteOptions.None,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+		public void Draw(TTexture texture,
+            Rectangle destinationRectangle,
+            Rectangle? sourceRectangle,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            SpriteOptions options,
+            float layerDepth)
+        {
+            //var srcRect = sourceRectangle ?? new(0, 0, texture.Size.Width, texture.Size.Height);
+            Draw(texture: texture,
+                destinationRectangle: destinationRectangle,
+                sourceRectangle: sourceRectangle ?? new()
+                {
+                    X = 0,
+                    Y = 0,
+                    Width = texture.Size.Width,
+                    Height = texture.Size.Height,
+                },
+                color: color,
+                rotation: rotation,
+                origin: origin,
+                options: options,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+		public void Draw(TTexture texture,
+            Rectangle destinationRectangle,
+            Rectangle? sourceRectangle,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            float layerDepth)
+        {
+            Draw(texture, destinationRectangle, sourceRectangle, color, rotation, origin, SpriteOptions.None, layerDepth);
+        }
+
+        /// <inheritdoc/>
+		public void Draw(TTexture texture,
+                Vector2 position,
+                Rectangle? sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                Vector2 scale,
+                SpriteOptions options,
+                float layerDepth)
+        {
+            //var srcRect = sourceRectangle ?? new(0, 0, texture.Size.Width, texture.Size.Height);
+            Draw(texture: texture,
+                position: position,
+                sourceRectangle: sourceRectangle ?? new()
+                {
+                    X = 0,
+                    Y = 0,
+                    Width = texture.Size.Width,
+                    Height = texture.Size.Height,
+                },
+                color: color,
+                rotation: rotation,
+                origin: origin,
+                scale: scale,
+                options: options,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+		public void Draw(TTexture texture,
+                Vector2 position,
+                Rectangle? sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                Vector2 scale,
+                float layerDepth)
+        {
+            Draw(texture: texture,
+                position: position,
+                sourceRectangle: sourceRectangle,
+                color: color,
+                rotation: rotation,
+                origin: origin,
+                scale: scale,
+                options: SpriteOptions.None,
+                layerDepth: layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(TTexture texture,
+                Vector2 position,
+                Rectangle? sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                float scale,
+                SpriteOptions options,
+                float layerDepth)
+        {
+            Draw(texture, position, sourceRectangle, color, rotation, origin, new Vector2(scale), options, layerDepth);
+        }
+
+        /// <inheritdoc/>
+		public void Draw(TTexture texture,
+                Vector2 position,
+                Rectangle? sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                float scale,
+                float layerDepth)
+        {
+            Draw(texture, position, sourceRectangle, color, rotation, origin, scale, SpriteOptions.None, layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(TTexture texture,
+            Vector2 position,
+            Rectangle? sourceRectangle,
+            Color color,
+            SpriteOptions options,
+            float layerDepth)
+        {
+            Draw(texture, position, sourceRectangle, color, 0f, default, 0f, options, layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(TTexture texture,
+            Vector2 position,
+            Rectangle? sourceRectangle,
+            Color color,
+            float layerDepth)
+        {
+            Draw(texture, position, sourceRectangle, color, SpriteOptions.None, layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(TTexture texture,
+            Rectangle destinationRectangle,
+            Rectangle? sourceRectangle,
+            Color color,
+            SpriteOptions options,
+            float layerDepth)
+        {
+            Draw(texture, destinationRectangle, sourceRectangle, color, 0, default, options, layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(TTexture texture,
+            Rectangle destinationRectangle,
+            Rectangle? sourceRectangle,
+            Color color,
+            float layerDepth)
+        {
+            Draw(texture, destinationRectangle, sourceRectangle, color, SpriteOptions.None, layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(TTexture texture,
+            Vector2 position,
+            Color color,
+            SpriteOptions options,
+            float layerDepth)
+        {
+            Draw(texture, position, new Rectangle(default, texture.Size), color, 0, default, default, options, layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(TTexture texture,
+            Vector2 position,
+            Color color,
+            float layerDepth)
+        {
+            Draw(texture, position, new Rectangle(default, texture.Size), color, 0, default, default, SpriteOptions.None, layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(TTexture texture,
+            Rectangle destinationRectangle,
+            Color color,
+            SpriteOptions options,
+            float layerDepth)
+        {
+            Draw(texture, destinationRectangle, new Rectangle(default, texture.Size), color, 0, default, options, layerDepth);
+        }
+
+        /// <inheritdoc/>
+        public void Draw(TTexture texture,
+            Rectangle destinationRectangle,
+            Color color,
+            float layerDepth)
+        {
+            Draw(texture, destinationRectangle, color, SpriteOptions.None, layerDepth);
+        }
+        #endregion
     }
 }

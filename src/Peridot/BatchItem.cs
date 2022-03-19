@@ -17,13 +17,14 @@ namespace Peridot
                 Vector2 origin,
                 Vector2 scale,
                 float layerDepth,
-                RectangleF scissor)
+                RectangleF scissor,
+                SpriteOptions options)
         {
             origin *= scale;
 
             var sourceSize = new Vector2(sourceRectangle.Width, sourceRectangle.Height) / textureSize;
             var srcPos = new Vector2(sourceRectangle.X, sourceRectangle.Y) / textureSize;
-            UV = Matrix4x4.CreateScale(new Vector3(sourceSize, 1)) * Matrix4x4.CreateTranslation(new(srcPos, 0));
+            UV = CreateFlip(options) * Matrix4x4.CreateScale(new Vector3(sourceSize, 1)) * Matrix4x4.CreateTranslation(new(srcPos, 0));
             Color = ToVector(color);
             Model =
                 Matrix4x4.CreateScale(new Vector3(new Vector2(sourceRectangle.Width, sourceRectangle.Height) * scale, 1)) *
@@ -41,12 +42,13 @@ namespace Peridot
             float rotation,
             Vector2 origin,
             float layerDepth,
-            RectangleF scissor)
+            RectangleF scissor,
+            SpriteOptions options)
         {
             var sourceSize = new Vector2(sourceRectangle.Width, sourceRectangle.Height) / textureSize;
             var pos = new Vector2(sourceRectangle.X, sourceRectangle.Y) / textureSize;
 
-            UV = Matrix4x4.CreateScale(new Vector3(sourceSize, 1)) * Matrix4x4.CreateTranslation(new(pos, 0));
+            UV = CreateFlip(options) * Matrix4x4.CreateScale(new Vector3(sourceSize, 1)) * Matrix4x4.CreateTranslation(new(pos, 0));
             Color = ToVector(color);
             Model =
                 Matrix4x4.CreateScale(new Vector3(destinationRectangle.Width, destinationRectangle.Height, 0)) *
@@ -64,16 +66,17 @@ namespace Peridot
 
         public RectangleF Scissor { get; set; }
 
-        private static Matrix4x4 ToMatrix(RectangleF r) =>
-            Matrix4x4.CreateScale(new Vector3(r.Width, r.Height, 1)) *
-            Matrix4x4.CreateTranslation(new(r.X, r.Y, 0));
-
-        private static Matrix4x4 ToMatrix(RectangleF r, float rotation, Vector2 origin) =>
-            Matrix4x4.CreateScale(new Vector3(r.Width, r.Height, 1)) *
-            Matrix4x4.CreateTranslation(new(-origin, 0)) *
-            Matrix4x4.CreateRotationZ(rotation) *
-            Matrix4x4.CreateTranslation(new(r.X, r.Y, 0));
-
         private static Vector4 ToVector(Color color) => new Vector4(color.R, color.G, color.B, color.A) * (1f / 255f);
+
+        private static Matrix4x4 CreateFlip(SpriteOptions options)
+        {
+            if (options == SpriteOptions.None)
+                return Matrix4x4.Identity;
+
+            var flipX = options.HasFlag(SpriteOptions.FlipHorizontally);
+            var flipY = options.HasFlag(SpriteOptions.FlipVertically);
+
+            return Matrix4x4.CreateScale(flipX ? -1 : 1, flipY ? -1 : 1, 1) * Matrix4x4.CreateTranslation(flipX ? 1 : 0, flipY ? 1 : 0, 0);
+        }
     }
 }
