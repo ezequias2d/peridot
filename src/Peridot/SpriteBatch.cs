@@ -158,8 +158,8 @@ namespace Peridot
 
         private static RectangleF Transform(RectangleF rect, Matrix4x4 matrix)
         {
-            var pos = Vector4.Transform(new Vector4(rect.X, rect.Y, 0, 0), matrix);
-            var size = Vector4.Transform(new Vector4(rect.X + rect.Width, rect.Y + rect.Height, 0, 0), matrix);
+            var pos = Vector4.Transform(new Vector4(rect.X, rect.Y, 0, 1), matrix);
+            var size = Vector4.Transform(new Vector4(rect.X + rect.Width, rect.Y + rect.Height, 0, 1), matrix);
             return new(pos.X, pos.Y, size.X - pos.X, size.Y - pos.Y);
         }
 
