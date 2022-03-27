@@ -25,7 +25,7 @@ namespace Peridot
             Scissor = scissor;
         }
 
-        public BatchItem(Vector2 textureSize, Vector2 position, Rectangle sourceRectangle, Color color, float rotation,
+        public BatchItem(Vector2 textureSize, Vector2 position, RectangleF sourceRectangle, Color color, float rotation,
                          Vector2 origin, Vector2 scale, float layerDepth, RectangleF scissor, SpriteOptions options) 
             : this(textureSize, new RectangleF(position.X, position.Y, sourceRectangle.Width * scale.X, sourceRectangle.Height * scale.Y), 
                     sourceRectangle, 

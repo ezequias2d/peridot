@@ -76,15 +76,15 @@ namespace Peridot
         }
 
         /// <inheritdoc/>
-        public void Draw(ITexture2D texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, SpriteOptions options, float layerDepth) =>
+        public void Draw(ITexture2D texture, RectangleF destinationRectangle, RectangleF sourceRectangle, Color color, float rotation, Vector2 origin, SpriteOptions options, float layerDepth) =>
             Draw(SpriteBatch<TTexture>.Cast(texture), destinationRectangle, sourceRectangle, color, rotation, origin, options, layerDepth);
 
         /// <inheritdoc/>
-        public void Draw(ITexture2D texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteOptions options, float layerDepth) =>
+        public void Draw(ITexture2D texture, Vector2 position, RectangleF sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteOptions options, float layerDepth) =>
             Draw(SpriteBatch<TTexture>.Cast(texture), position, sourceRectangle, color, rotation, origin, scale, options, layerDepth);
 
         /// <inheritdoc/>
-        public void Draw(TTexture texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, SpriteOptions options, float layerDepth)
+        public void Draw(TTexture texture, RectangleF destinationRectangle, RectangleF sourceRectangle, Color color, float rotation, Vector2 origin, SpriteOptions options, float layerDepth)
         {
             CheckValid(texture);
             ref var item = ref _batcher.Add(texture);
@@ -94,7 +94,7 @@ namespace Peridot
         }
 
         /// <inheritdoc/>
-        public void Draw(TTexture texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteOptions options, float layerDepth)
+        public void Draw(TTexture texture, Vector2 position, RectangleF sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteOptions options, float layerDepth)
         {
             CheckValid(texture);
             ref var item = ref _batcher.Add(texture);
@@ -166,8 +166,8 @@ namespace Peridot
         #region ISpriteBatch
         /// <inheritdoc/>
         public void Draw(ITexture2D texture,
-                Rectangle destinationRectangle,
-                Rectangle sourceRectangle,
+                RectangleF destinationRectangle,
+                RectangleF sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -179,7 +179,7 @@ namespace Peridot
         /// <inheritdoc/>
         public void Draw(ITexture2D texture,
                 Vector2 position,
-                Rectangle sourceRectangle,
+                RectangleF sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -191,8 +191,8 @@ namespace Peridot
 
         /// <inheritdoc/>
 		public void Draw(ITexture2D texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
+            RectangleF destinationRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             float rotation,
             Vector2 origin,
@@ -205,8 +205,8 @@ namespace Peridot
 
         /// <inheritdoc/>
 		public void Draw(ITexture2D texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
+            RectangleF destinationRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             float rotation,
             Vector2 origin,
@@ -218,7 +218,7 @@ namespace Peridot
         /// <inheritdoc/>
 		public void Draw(ITexture2D texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -226,7 +226,6 @@ namespace Peridot
                 SpriteOptions options,
                 float layerDepth)
         {
-            //var srcRect = sourceRectangle ?? new(0, 0, texture.Size.Width, texture.Size.Height);
             Draw(texture: texture,
                 position: position,
                 sourceRectangle: sourceRectangle ?? new()
@@ -247,7 +246,7 @@ namespace Peridot
         /// <inheritdoc/>
 		public void Draw(ITexture2D texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -268,7 +267,7 @@ namespace Peridot
         /// <inheritdoc/>
 		public void Draw(ITexture2D texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -290,7 +289,7 @@ namespace Peridot
         /// <inheritdoc/>
 		public void Draw(ITexture2D texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -311,7 +310,7 @@ namespace Peridot
         /// <inheritdoc/>
         public void Draw(ITexture2D texture,
             Vector2 position,
-            Rectangle? sourceRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             SpriteOptions options,
             float layerDepth)
@@ -330,7 +329,7 @@ namespace Peridot
         /// <inheritdoc/>
         public void Draw(ITexture2D texture,
             Vector2 position,
-            Rectangle? sourceRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             float layerDepth)
         {
@@ -344,8 +343,8 @@ namespace Peridot
 
         /// <inheritdoc/>
         public void Draw(ITexture2D texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
+            RectangleF destinationRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             SpriteOptions options,
             float layerDepth)
@@ -362,8 +361,8 @@ namespace Peridot
 
         /// <inheritdoc/>
         public void Draw(ITexture2D texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
+            RectangleF destinationRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             float layerDepth)
         {
@@ -409,7 +408,7 @@ namespace Peridot
 
         /// <inheritdoc/>
         public void Draw(ITexture2D texture,
-            Rectangle destinationRectangle,
+            RectangleF destinationRectangle,
             Color color,
             SpriteOptions options,
             float layerDepth)
@@ -426,7 +425,7 @@ namespace Peridot
 
         /// <inheritdoc/>
         public void Draw(ITexture2D texture,
-            Rectangle destinationRectangle,
+            RectangleF destinationRectangle,
             Color color,
             float layerDepth)
         {
@@ -442,8 +441,8 @@ namespace Peridot
         
         /// <inheritdoc/>
         public void Draw(TTexture texture,
-                Rectangle destinationRectangle,
-                Rectangle sourceRectangle,
+                RectangleF destinationRectangle,
+                RectangleF sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -462,7 +461,7 @@ namespace Peridot
         /// <inheritdoc/>
         public void Draw(TTexture texture,
                 Vector2 position,
-                Rectangle sourceRectangle,
+                RectangleF sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -482,15 +481,15 @@ namespace Peridot
 
         /// <inheritdoc/>
 		public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
+            RectangleF destinationRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             float rotation,
             Vector2 origin,
             SpriteOptions options,
             float layerDepth)
         {
-            //var srcRect = sourceRectangle ?? new(0, 0, texture.Size.Width, texture.Size.Height);
+            //var srcRect = sourceRectangleF ?? new(0, 0, texture.Size.Width, texture.Size.Height);
             Draw(texture: texture,
                 destinationRectangle: destinationRectangle,
                 sourceRectangle: sourceRectangle ?? new()
@@ -509,8 +508,8 @@ namespace Peridot
 
         /// <inheritdoc/>
 		public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
+            RectangleF destinationRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             float rotation,
             Vector2 origin,
@@ -522,7 +521,7 @@ namespace Peridot
         /// <inheritdoc/>
 		public void Draw(TTexture texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -530,7 +529,7 @@ namespace Peridot
                 SpriteOptions options,
                 float layerDepth)
         {
-            //var srcRect = sourceRectangle ?? new(0, 0, texture.Size.Width, texture.Size.Height);
+            //var srcRect = sourceRectangleF ?? new(0, 0, texture.Size.Width, texture.Size.Height);
             Draw(texture: texture,
                 position: position,
                 sourceRectangle: sourceRectangle ?? new()
@@ -551,7 +550,7 @@ namespace Peridot
         /// <inheritdoc/>
 		public void Draw(TTexture texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -572,7 +571,7 @@ namespace Peridot
         /// <inheritdoc/>
         public void Draw(TTexture texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -586,7 +585,7 @@ namespace Peridot
         /// <inheritdoc/>
 		public void Draw(TTexture texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -599,7 +598,7 @@ namespace Peridot
         /// <inheritdoc/>
         public void Draw(TTexture texture,
             Vector2 position,
-            Rectangle? sourceRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             SpriteOptions options,
             float layerDepth)
@@ -610,7 +609,7 @@ namespace Peridot
         /// <inheritdoc/>
         public void Draw(TTexture texture,
             Vector2 position,
-            Rectangle? sourceRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             float layerDepth)
         {
@@ -619,8 +618,8 @@ namespace Peridot
 
         /// <inheritdoc/>
         public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
+            RectangleF destinationRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             SpriteOptions options,
             float layerDepth)
@@ -630,8 +629,8 @@ namespace Peridot
 
         /// <inheritdoc/>
         public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
+            RectangleF destinationRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             float layerDepth)
         {
@@ -659,7 +658,7 @@ namespace Peridot
 
         /// <inheritdoc/>
         public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
+            RectangleF destinationRectangle,
             Color color,
             SpriteOptions options,
             float layerDepth)
@@ -669,7 +668,7 @@ namespace Peridot
 
         /// <inheritdoc/>
         public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
+            RectangleF destinationRectangle,
             Color color,
             float layerDepth)
         {

@@ -50,8 +50,6 @@ namespace Peridot
         /// <exception cref="InvalidOperationException">This command should be called after <see cref="Begin"/> and drawing commands.</exception>
         public void End();
 
-
-
         /// <summary>
         /// Submit sprite draw in the batch.
         /// </summary>
@@ -64,15 +62,13 @@ namespace Peridot
         /// <param name="options">Options that modify the drawing.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(ITexture2D texture,
-                Rectangle destinationRectangle,
-                Rectangle sourceRectangle,
+                RectangleF destinationRectangle,
+                RectangleF sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
                 SpriteOptions options,
                 float layerDepth);
-
-       
 
         /// <summary>
         /// Submit sprite draw in the batch.
@@ -88,7 +84,7 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(ITexture2D texture,
                 Vector2 position,
-                Rectangle sourceRectangle,
+                RectangleF sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -107,15 +103,12 @@ namespace Peridot
         /// <param name="origin">Sprite center.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
 		public void Draw(ITexture2D texture,
-                Rectangle destinationRectangle,
-                Rectangle sourceRectangle,
+                RectangleF destinationRectangle,
+                RectangleF sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
-                float layerDepth)
-        {
-            Draw(texture, destinationRectangle, sourceRectangle, color, rotation, origin, SpriteOptions.None, layerDepth);
-        }
+                float layerDepth);
 
         /// <summary>
         /// Submit sprite draw in the batch.
@@ -130,15 +123,12 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(ITexture2D texture,
                 Vector2 position,
-                Rectangle sourceRectangle,
+                RectangleF sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
                 Vector2 scale,
-                float layerDepth)
-        {
-            Draw(texture, position, sourceRectangle, color, rotation, origin, scale, SpriteOptions.None, layerDepth);
-        }
+                float layerDepth);
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -152,17 +142,13 @@ namespace Peridot
         /// <param name="options">Options that modify the drawing.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
 		public void Draw(ITexture2D texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
-            Color color,
-            float rotation,
-            Vector2 origin,
-            SpriteOptions options,
-            float layerDepth)
-        {
-            var srcRect = sourceRectangle ?? new(0, 0, texture.Size.Width, texture.Size.Height);
-            Draw(texture, destinationRectangle, srcRect, color, rotation, origin, options, layerDepth);
-        }
+                RectangleF destinationRectangle,
+                RectangleF? sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                SpriteOptions options,
+                float layerDepth);
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -175,15 +161,12 @@ namespace Peridot
         /// <param name="origin">Sprite center.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
 		public void Draw(ITexture2D texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
-            Color color,
-            float rotation,
-            Vector2 origin,
-            float layerDepth)
-        {
-            Draw(texture, destinationRectangle, sourceRectangle, color, rotation, origin, SpriteOptions.None, layerDepth);
-        }
+                RectangleF destinationRectangle,
+                RectangleF? sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                float layerDepth);
 
         /// <summary>
         /// Submit sprite draw in the batch.
@@ -199,31 +182,13 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
 		public void Draw(ITexture2D texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
                 Vector2 scale,
                 SpriteOptions options,
-                float layerDepth)
-        {
-            //var srcRect = sourceRectangle ?? new(0, 0, texture.Size.Width, texture.Size.Height);
-            Draw(texture: texture,
-                position: position,
-                sourceRectangle: sourceRectangle ?? new()
-                {
-                    X = 0,
-                    Y = 0,
-                    Width = texture.Size.Width,
-                    Height = texture.Size.Height,
-                },
-                color: color,
-                rotation: rotation,
-                origin: origin,
-                scale: scale,
-                options: options,
-                layerDepth: layerDepth);
-        }
+                float layerDepth);
 
         /// <summary>
         /// Submit sprite draw in the batch.
@@ -238,23 +203,12 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
 		public void Draw(ITexture2D texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
                 Vector2 scale,
-                float layerDepth)
-        {
-            Draw(texture: texture,
-                position: position,
-                sourceRectangle: sourceRectangle,
-                color: color,
-                rotation: rotation,
-                origin: origin,
-                scale: scale,
-                options: SpriteOptions.None,
-                layerDepth: layerDepth);
-        }
+                float layerDepth);
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -270,24 +224,13 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
 		public void Draw(ITexture2D texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
                 float scale,
                 SpriteOptions options,
-                float layerDepth)
-        {
-            Draw(texture: texture,
-                position: position,
-                sourceRectangle: sourceRectangle,
-                color: color,
-                rotation: rotation,
-                origin: origin,
-                scale: new Vector2(scale),
-                options: options,
-                layerDepth: layerDepth);
-        }
+                float layerDepth);
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -301,51 +244,29 @@ namespace Peridot
         /// <param name="scale">A scaling of this sprite.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
 		public void Draw(ITexture2D texture,
+                    Vector2 position,
+                    RectangleF? sourceRectangle,
+                    Color color,
+                    float rotation,
+                    Vector2 origin,
+                    float scale,
+                    float layerDepth);
+
+        /// <summary>
+        /// Submit a sprite for drawing in the current batch.
+        /// </summary>
+        /// <param name="texture">The source texture.</param>
+        /// <param name="position">The drawing location on screen.</param>
+        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
+        /// <param name="color">Color multiplier.</param>
+        /// <param name="options">Options that modify the drawing.</param>
+        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
+        public void Draw(ITexture2D texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
-                float rotation,
-                Vector2 origin,
-                float scale,
-                float layerDepth)
-        {
-            Draw(texture: texture,
-                position: position,
-                sourceRectangle: sourceRectangle,
-                color: color,
-                rotation: rotation,
-                origin: origin,
-                scale: scale,
-                options: SpriteOptions.None,
-                layerDepth: layerDepth);
-        }
-
-        /// <summary>
-        /// Submit a sprite for drawing in the current batch.
-        /// </summary>
-        /// <param name="texture">The source texture.</param>
-        /// <param name="position">The drawing location on screen.</param>
-        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
-        /// <param name="color">Color multiplier.</param>
-        /// <param name="options">Options that modify the drawing.</param>
-        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-        public void Draw(ITexture2D texture,
-            Vector2 position,
-            Rectangle? sourceRectangle,
-            Color color,
-            SpriteOptions options,
-            float layerDepth)
-        {
-            Draw(texture: texture,
-                position: position,
-                sourceRectangle: sourceRectangle,
-                color: color,
-                rotation: 0f,
-                origin: default,
-                scale: 0f,
-                options: options,
-                layerDepth: layerDepth);
-        }
+                SpriteOptions options,
+                float layerDepth);
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -356,18 +277,10 @@ namespace Peridot
         /// <param name="color">Color multiplier.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(ITexture2D texture,
-            Vector2 position,
-            Rectangle? sourceRectangle,
-            Color color,
-            float layerDepth)
-        {
-            Draw(texture: texture,
-                position: position,
-                sourceRectangle: sourceRectangle,
-                color: color,
-                options: SpriteOptions.None,
-                layerDepth: layerDepth);
-        }
+                Vector2 position,
+                RectangleF? sourceRectangle,
+                Color color,
+                float layerDepth);
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -379,21 +292,11 @@ namespace Peridot
         /// <param name="options">Options that modify the drawing.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(ITexture2D texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
-            Color color,
-            SpriteOptions options,
-            float layerDepth)
-        {
-            Draw(texture: texture,
-                destinationRectangle: destinationRectangle,
-                sourceRectangle: sourceRectangle,
-                color: color,
-                rotation: 0,
-                origin: default,
-                options: options,
-                layerDepth: layerDepth);
-        }
+                RectangleF destinationRectangle,
+                RectangleF? sourceRectangle,
+                Color color,
+                SpriteOptions options,
+                float layerDepth);
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -404,19 +307,10 @@ namespace Peridot
         /// <param name="color">Color multiplier.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(ITexture2D texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
-            Color color,
-            float layerDepth)
-        {
-            Draw(texture: texture,
-                destinationRectangle:
-                destinationRectangle,
-                sourceRectangle: sourceRectangle,
-                color: color,
-                options: SpriteOptions.None,
-                layerDepth: layerDepth);
-        }
+                RectangleF destinationRectangle,
+                RectangleF? sourceRectangle,
+                Color color,
+                float layerDepth);
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -427,21 +321,10 @@ namespace Peridot
         /// <param name="options">Options that modify the drawing.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(ITexture2D texture,
-            Vector2 position,
-            Color color,
-            SpriteOptions options,
-            float layerDepth)
-        {
-            Draw(texture: texture,
-                position: position,
-                sourceRectangle: new Rectangle(default, texture.Size),
-                color: color,
-                rotation: 0,
-                origin: default,
-                scale: default,
-                options: options,
-                layerDepth: layerDepth);
-        }
+                Vector2 position,
+                Color color,
+                SpriteOptions options,
+                float layerDepth);
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -451,16 +334,9 @@ namespace Peridot
         /// <param name="color">Color multiplier.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(ITexture2D texture,
-            Vector2 position,
-            Color color,
-            float layerDepth)
-        {
-            Draw(texture: texture,
-                position: position,
-                color: color,
-                options: SpriteOptions.None,
-                layerDepth: layerDepth);
-        }
+                Vector2 position,
+                Color color,
+                float layerDepth);
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -471,20 +347,10 @@ namespace Peridot
         /// <param name="options">Options that modify the drawing.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(ITexture2D texture,
-            Rectangle destinationRectangle,
-            Color color,
-            SpriteOptions options,
-            float layerDepth)
-        {
-            Draw(texture: texture,
-                destinationRectangle: destinationRectangle,
-                sourceRectangle: new Rectangle(default, texture.Size),
-                color: color,
-                rotation: 0,
-                origin: default,
-                options: options,
-                layerDepth: layerDepth);
-        }
+                RectangleF destinationRectangle,
+                Color color,
+                SpriteOptions options,
+                float layerDepth);
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -494,16 +360,9 @@ namespace Peridot
         /// <param name="color">Color multiplier.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(ITexture2D texture,
-            Rectangle destinationRectangle,
-            Color color,
-            float layerDepth)
-        {
-            Draw(texture: texture,
-                destinationRectangle: destinationRectangle,
-                color: color,
-                options: SpriteOptions.None,
-                layerDepth: layerDepth);
-        }
+                RectangleF destinationRectangle,
+                Color color,
+                float layerDepth);
     }
 
     /// <summary>
@@ -523,8 +382,8 @@ namespace Peridot
         /// <param name="options">Options that modify the drawing.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(TTexture texture,
-                Rectangle destinationRectangle,
-                Rectangle sourceRectangle,
+                RectangleF destinationRectangle,
+                RectangleF sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -545,7 +404,7 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(TTexture texture,
                 Vector2 position,
-                Rectangle sourceRectangle,
+                RectangleF sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -564,8 +423,8 @@ namespace Peridot
         /// <param name="origin">Sprite center.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(TTexture texture,
-                Rectangle destinationRectangle,
-                Rectangle sourceRectangle,
+                RectangleF destinationRectangle,
+                RectangleF sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -584,7 +443,7 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(TTexture texture,
                 Vector2 position,
-                Rectangle sourceRectangle,
+                RectangleF sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -603,8 +462,8 @@ namespace Peridot
         /// <param name="options">Options that modify the drawing.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
 		public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
+            RectangleF destinationRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             float rotation,
             Vector2 origin,
@@ -622,8 +481,8 @@ namespace Peridot
         /// <param name="origin">Sprite center.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
 		public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
+            RectangleF destinationRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             float rotation,
             Vector2 origin,
@@ -643,7 +502,7 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
 		public void Draw(TTexture texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -664,7 +523,7 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
 		public void Draw(TTexture texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -685,7 +544,7 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(TTexture texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -706,7 +565,7 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
 		public void Draw(TTexture texture,
                 Vector2 position,
-                Rectangle? sourceRectangle,
+                RectangleF? sourceRectangle,
                 Color color,
                 float rotation,
                 Vector2 origin,
@@ -724,7 +583,7 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(TTexture texture,
             Vector2 position,
-            Rectangle? sourceRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             SpriteOptions options,
             float layerDepth);
@@ -739,7 +598,7 @@ namespace Peridot
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(TTexture texture,
             Vector2 position,
-            Rectangle? sourceRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             float layerDepth);
 
@@ -753,8 +612,8 @@ namespace Peridot
         /// <param name="options">Options that modify the drawing.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
+            RectangleF destinationRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             SpriteOptions options,
             float layerDepth);
@@ -768,8 +627,8 @@ namespace Peridot
         /// <param name="color">Color multiplier.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
-            Rectangle? sourceRectangle,
+            RectangleF destinationRectangle,
+            RectangleF? sourceRectangle,
             Color color,
             float layerDepth);
 
@@ -808,7 +667,7 @@ namespace Peridot
         /// <param name="options">Options that modify the drawing.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
+            RectangleF destinationRectangle,
             Color color,
             SpriteOptions options,
             float layerDepth);
@@ -821,7 +680,7 @@ namespace Peridot
         /// <param name="color">Color multiplier.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
         public void Draw(TTexture texture,
-            Rectangle destinationRectangle,
+            RectangleF destinationRectangle,
             Color color,
             float layerDepth);
     }
