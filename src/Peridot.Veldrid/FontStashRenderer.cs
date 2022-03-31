@@ -47,7 +47,7 @@ namespace Peridot.Veldrid
         {
             const int v = 1 << 23;
             const int s = -(1 << 22);
-            Scissor = new Rectangle(v, v, s, s);
+            Scissor = new Rectangle(s, s, v, v);
         }
 
         public void Draw(object texture, Vector2 pos, Rectangle? src, Color color, float rotation, Vector2 origin, Vector2 scale, float depth)
