@@ -12,6 +12,7 @@ using Font = Peridot.Veldrid.Font;
 using StbImageSharp;
 using System.Diagnostics;
 using Rectangle = System.Drawing.Rectangle;
+using Peridot;
 
 var title = "Peridot.Demo";
 var wci = new WindowCreateInfo(100, 100, 640, 480, WindowState.Normal, title);
@@ -70,7 +71,12 @@ while (window.Exists)
     if (ps == 0 || ps == 100)
         neg = !neg;
 
-    sb.Draw(texture, default, source, Color.White, 0, new(-size.X / 6, 0), Vector2.One, 1f);
+    var options = ps >= 0 && ps < 25 ? SpriteOptions.None :
+                  ps >= 25 && ps < 50 ? SpriteOptions.FlipVertically :
+                  ps >= 50 && ps < 75 ? SpriteOptions.FlipVertically | SpriteOptions.FlipHorizontally :
+                                        SpriteOptions.FlipHorizontally;
+
+    sb.Draw(texture, default, source, Color.White, 0, new(-size.X / 6, 0), Vector2.One, options, 1f);
 
     var s = font.MeasureString("Hello World!", 32);
     var strScissor = new Rectangle(0, 0, (int)s.X, (int)s.Y * ps / 100);
