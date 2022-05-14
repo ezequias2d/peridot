@@ -10,10 +10,11 @@ layout(location = 3) out vec2 pos;
 
 struct Item 
 {
-    mat4 source;
+    vec4 uv;
     vec4 color;
-    mat4 model;
-    mat4 projection;
+    vec2 scale;
+    vec2 origin;
+    vec4 location;
     vec4 scissor;
 };
 
@@ -23,17 +24,31 @@ layout(std430, binding = 0) readonly buffer Items
     Item items[];
 };
 
+mat2 makeRotation(float angle)
+{
+    float c = cos(angle);
+    float s = sin(angle);
+    return mat2(c, -s, s, c);
+}
+
 void main()
 {
     Item item = items[gl_InstanceIndex];
-    tex_coord = (item.source * vec4(Position, 0, 1)).xy;
+
+    float angle = item.location.w;
+    pos = Position * item.scale;
+    pos -= item.origin;
+    pos *= makeRotation(item.location.w);
+    pos += item.location.xy;
+
+    tex_coord = Position * item.uv.zw + item.uv.xy;
     
     // scissor bounds
     vec2 start = item.scissor.xy;
     vec2 end = start + item.scissor.zw;
     bounds = vec4(start, end);
 
-    gl_Position = item.projection * view * item.model * vec4(Position, 0, 1);
+    gl_Position = view * vec4(pos, item.location.z, 1);
     pos = gl_Position.xy;
 
     if(!InvertY)

@@ -14,14 +14,12 @@ namespace Peridot
             var sourceSize = new Vector2(sourceRectangle.Width, sourceRectangle.Height) / textureSize;
             var pos = new Vector2(sourceRectangle.X, sourceRectangle.Y) / textureSize;
 
-            UV = CreateFlip(options) * Matrix4x4.CreateScale(new Vector3(sourceSize, 1)) * Matrix4x4.CreateTranslation(new(pos, 0));
+            UV = CreateUV(options, sourceSize, pos);
             Color = ToVector(color);
-            Model =
-                Matrix4x4.CreateScale(new Vector3(destinationRectangle.Width, destinationRectangle.Height, 0)) *
-                Matrix4x4.CreateTranslation(new Vector3(-origin, 0)) *
-                Matrix4x4.CreateRotationZ(rotation) *
-                Matrix4x4.CreateTranslation(new Vector3(destinationRectangle.X, destinationRectangle.Y, layerDepth));
-            Projection = Matrix4x4.Identity;
+            Scale = destinationRectangle.Size.ToVector2();
+            Origin = origin;
+            Location = new(destinationRectangle.Location.ToVector2(), layerDepth);
+            Rotation = rotation;
             Scissor = scissor;
         }
 
@@ -38,23 +36,41 @@ namespace Peridot
         {
         }
 
-        public Matrix4x4 UV { get; set; }
+        public Vector4 UV { get; set; }
         public Vector4 Color { get; set; }
-        public Matrix4x4 Model { get; set; }
-        public Matrix4x4 Projection { get; set; }
+        public Vector2 Scale { get; set; }
+        public Vector2 Origin { get; set; }
+        public Vector3 Location { get; set; }
+        public float Rotation { get; set; }
         public RectangleF Scissor { get; set; }
+
+        private static Vector4 CreateUV(SpriteOptions options, Vector2 sourceSize, Vector2 sourceLocation)
+        {
+            if (options != SpriteOptions.None)
+            {
+                // flipX
+                if (options.HasFlag(SpriteOptions.FlipHorizontally))
+                {
+                    sourceLocation.X += sourceSize.X;
+                    sourceSize.X *= -1;
+                }
+
+                // flipY
+                if (options.HasFlag(SpriteOptions.FlipVertically))
+                {
+                    sourceLocation.Y += sourceSize.Y;
+                    sourceSize.Y *= -1;
+                }
+            }
+
+            return new(sourceLocation.X, sourceLocation.Y, sourceSize.X, sourceSize.Y);
+        }
 
         private static Vector4 ToVector(Color color) => new Vector4(color.R, color.G, color.B, color.A) * (1f / 255f);
 
-        private static Matrix4x4 CreateFlip(SpriteOptions options)
+        public override string ToString()
         {
-            if (options == SpriteOptions.None)
-                return Matrix4x4.Identity;
-
-            var flipX = options.HasFlag(SpriteOptions.FlipHorizontally);
-            var flipY = options.HasFlag(SpriteOptions.FlipVertically);
-
-            return Matrix4x4.CreateScale(flipX ? -1 : 1, flipY ? -1 : 1, 1) * Matrix4x4.CreateTranslation(flipX ? 1 : 0, flipY ? 1 : 0, 0);
+            return $"uv: {UV}, color: {Color}, scale: {Scale}, origin: {Origin}, location: {new Vector4(Location, Rotation)}, scissor: {Scissor}";
         }
     }
 }
