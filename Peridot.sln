@@ -7,12 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Peridot", "src\Peridot\Peri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Peridot.Veldrid", "src\Peridot.Veldrid\Peridot.Veldrid.csproj", "{06D982B2-97D8-4C38-9837-50D2EA5E050D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Peridot.Demo", "src\Peridot.Demo\Peridot.Demo.csproj", "{2B5DA501-2051-4045-A3C7-B5E9C74DE7ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Peridot.Demo", "src\Peridot.Demo\Peridot.Demo.csproj", "{2B5DA501-2051-4045-A3C7-B5E9C74DE7ED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F5D6FEB2-6E90-4034-83E4-78BCA8EDDA25}"
 	ProjectSection(SolutionItems) = preProject
 		src\build\common.props.csproj = src\build\common.props.csproj
 		src\build\peridot.png = src\build\peridot.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{16654221-9CC4-4B02-A329-AC24440396D5}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Global
