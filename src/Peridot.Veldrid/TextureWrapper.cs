@@ -10,13 +10,15 @@ namespace Peridot.Veldrid;
 /// <summary>
 /// A wrapper with <see cref="ITexture2D"/> interface.
 /// </summary>
-public class TextureWrapper : ITexture2D, IEquatable<TextureWrapper> {
+public class TextureWrapper : ITexture2D, IEquatable<TextureWrapper>
+{
     /// <summary>
     /// Creates a new instance of <see cref="TextureWrapper"/>.
     /// </summary>
     /// <param name="texture">The texture.</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public TextureWrapper(Texture texture) {
+    public TextureWrapper(Texture texture)
+    {
         Texture = texture ?? throw new ArgumentNullException(nameof(texture));
     }
 
@@ -28,7 +30,7 @@ public class TextureWrapper : ITexture2D, IEquatable<TextureWrapper> {
     /// <summary>
     /// Size of texture
     /// </summary>
-    public Size Size => new((int) Texture.Width, (int) Texture.Height);
+    public Size Size => new((int)Texture.Width, (int)Texture.Height);
 
     /// <inheritdoc/>
     public bool IsDisposed => Texture.IsDisposed;
@@ -47,7 +49,8 @@ public class TextureWrapper : ITexture2D, IEquatable<TextureWrapper> {
     public override string? ToString() => Texture.ToString();
 
     /// <inheritdoc/>
-    public void Dispose() {
+    public void Dispose()
+    {
         Texture.Dispose();
         GC.SuppressFinalize(this);
     }
@@ -55,7 +58,7 @@ public class TextureWrapper : ITexture2D, IEquatable<TextureWrapper> {
     public static implicit operator TextureWrapper(Texture t) => new(t);
 
     public static implicit operator Texture(TextureWrapper t) => t.Texture;
-
+    
     public static bool operator ==(TextureWrapper left, TextureWrapper right) => left.Equals(right);
 
     public static bool operator !=(TextureWrapper left, TextureWrapper right) => !(left == right);
