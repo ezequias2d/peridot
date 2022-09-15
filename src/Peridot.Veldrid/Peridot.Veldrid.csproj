@@ -4,6 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Description>Peridot implementation using Veldrid lib.</Description>
 	</PropertyGroup>
 
@@ -11,7 +12,6 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Ez.Memory" Version="0.2.0-alpha" />
-	  <PackageReference Include="FontStashSharp" Version="1.0.4" />
 	  <PackageReference Include="Veldrid" Version="4.8.0" />
 	  <PackageReference Include="Veldrid.SPIRV" Version="1.0.14" />
 	</ItemGroup>
