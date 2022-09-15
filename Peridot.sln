@@ -20,6 +20,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ACE2E1B3-D8BA-4BF8-B188-C5CB1C948075}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Peridot.Sample2", "src\Peridot.Sample2\Peridot.Sample2.csproj", "{B65C90A8-64E6-47B7-A392-53DF086F622A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,11 +42,18 @@ Global
 		{2B5DA501-2051-4045-A3C7-B5E9C74DE7ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B5DA501-2051-4045-A3C7-B5E9C74DE7ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B5DA501-2051-4045-A3C7-B5E9C74DE7ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B65C90A8-64E6-47B7-A392-53DF086F622A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B65C90A8-64E6-47B7-A392-53DF086F622A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B65C90A8-64E6-47B7-A392-53DF086F622A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B65C90A8-64E6-47B7-A392-53DF086F622A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {283E4FA4-87D7-4804-B948-D717D1157195}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B65C90A8-64E6-47B7-A392-53DF086F622A} = {ACE2E1B3-D8BA-4BF8-B188-C5CB1C948075}
 	EndGlobalSection
 EndGlobal
