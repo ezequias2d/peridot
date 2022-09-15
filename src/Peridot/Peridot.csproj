@@ -9,6 +9,11 @@
 Peridot.Veldrid implements this with the Veldrid.</Description>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FontStashSharp" Version="1.2.6" />
+  </ItemGroup>
+
+
   <Import Project="..\build\common.props.csproj" />
 
 </Project>

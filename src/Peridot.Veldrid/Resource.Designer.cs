@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Peridot.Veldrid 
+namespace Peridot 
 {
     using System;
     

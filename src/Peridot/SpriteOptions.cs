@@ -1,22 +1,21 @@
-﻿namespace Peridot
+﻿namespace Peridot;
+
+/// <summary>
+/// Defines sprite options.
+/// </summary>
+[Flags]
+public enum SpriteOptions
 {
     /// <summary>
-    /// Defines sprite options.
+    /// Nothing is applied in sprite rendering.
     /// </summary>
-    [Flags]
-    public enum SpriteOptions
-    {
-        /// <summary>
-        /// Nothing is applied in sprite rendering.
-        /// </summary>
-        None,
-        /// <summary>
-        /// Horizontal flip is applied in sprite rendering.
-        /// </summary>
-        FlipHorizontally,
-        /// <summary>
-        /// Vertical flip is applied in sprite rendering.
-        /// </summary>
-        FlipVertically,
-    }
+    None,
+    /// <summary>
+    /// Horizontal flip is applied in sprite rendering.
+    /// </summary>
+    FlipHorizontally,
+    /// <summary>
+    /// Vertical flip is applied in sprite rendering.
+    /// </summary>
+    FlipVertically,
 }
