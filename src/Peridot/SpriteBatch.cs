@@ -688,7 +688,7 @@ public abstract class SpriteBatch<TImage> : ISpriteBatch<TImage>
 	/// <inheritdoc/>
 	public void DrawDot(Vector2 position, float size, Color color, float layerDepth)
 	{
-		Draw(m_whiteImage, new RectangleF(0, 0, size, size), new RectangleF(0, 0, 1, 1), color, layerDepth);
+		Draw(m_whiteImage, new RectangleF(position.X, position.Y, size, size), new RectangleF(0, 0, 1, 1), color, layerDepth);
 	}
 
 	/// <inheritdoc/>
