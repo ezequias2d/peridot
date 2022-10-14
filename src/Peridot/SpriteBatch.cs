@@ -319,7 +319,7 @@ public abstract class SpriteBatch<TImage> : ISpriteBatch<TImage>
             color: color,
             rotation: 0f,
             origin: default,
-            scale: 0f,
+            scale: 1f,
             options: options,
             layerDepth: layerDepth);
     }
@@ -386,7 +386,7 @@ public abstract class SpriteBatch<TImage> : ISpriteBatch<TImage>
             color: color,
             rotation: 0,
             origin: default,
-            scale: default,
+            scale: Vector2.One,
             options: options,
             layerDepth: layerDepth);
     }
