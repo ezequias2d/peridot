@@ -1,3 +1,4 @@
+using System.Drawing;
 namespace Peridot;
 
 /// <summary>
@@ -23,6 +24,19 @@ public interface IPeridot
     /// <param name="height">The height of the updated region.</param>
     /// <typeparam name="T">Type of data updated.</typeparam>
     public void UpdateImage<T>(Image image, ReadOnlySpan<T> source, uint x, uint y, uint width, uint height) where T : unmanaged;
+
+    /// <summary>
+    /// Copy a part of an image to another.
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="destination"></param>
+    /// <param name="sx"></param>
+    /// <param name="sy"></param>
+    /// <param name="dx"></param>
+    /// <param name="dy"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    public void CopyImage(Image source, Image destination, uint sx, uint sy, uint dx, uint dy, uint width, uint height);
 }
 
 /// <summary>

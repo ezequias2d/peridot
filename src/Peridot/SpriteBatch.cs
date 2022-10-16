@@ -365,8 +365,7 @@ public abstract class SpriteBatch<TImage> : ISpriteBatch<TImage>
         float layerDepth)
     {
         Draw(image: image,
-            destinationRectangle:
-            destinationRectangle,
+            destinationRectangle: destinationRectangle,
             sourceRectangle: sourceRectangle,
             color: color,
             options: SpriteOptions.None,

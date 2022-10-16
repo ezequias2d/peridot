@@ -1,6 +1,6 @@
 ﻿#version 450
 
-layout (constant_id = 0) const bool InvertY = false;
+layout(constant_id = 0) const bool InvertY = false;
 
 layout(location = 0) in vec2 Position;
 layout(location = 0) out vec4 fsin_Color;
@@ -18,10 +18,27 @@ struct Item
     vec4 scissor;
 };
 
-layout(std430, binding = 0) readonly buffer Items
+struct Slice 
+{
+    int start;
+    int end;
+    int reserved1;
+    int reserved2;
+};
+
+layout(std430, set = 0, binding = 0) readonly buffer Items
+{
+    Item items[];
+};
+
+layout(std140, set = 2, binding = 0) uniform View 
 {
     mat4 view;
-    Item items[];
+};
+
+layout(std140, set = 3, binding = 0) uniform Slices
+{
+    Slice slice;
 };
 
 mat2 makeRotation(float angle)
@@ -31,9 +48,8 @@ mat2 makeRotation(float angle)
     return mat2(c, -s, s, c);
 }
 
-void main()
-{
-    Item item = items[gl_InstanceIndex];
+void main() {
+    Item item = items[slice.start + gl_InstanceIndex];
 
     float angle = item.location.w;
     pos = Position * item.scale;
@@ -42,7 +58,7 @@ void main()
     pos += item.location.xy;
 
     tex_coord = Position * item.uv.zw + item.uv.xy;
-    
+
     // scissor bounds
     vec2 start = item.scissor.xy;
     vec2 end = start + item.scissor.zw;
@@ -51,9 +67,8 @@ void main()
     gl_Position = view * vec4(pos, item.location.z, 1);
     pos = gl_Position.xy;
 
-    if(!InvertY)
+    if (!InvertY)
         gl_Position.y = -gl_Position.y;
-
 
     fsin_Color = item.color;
 }
