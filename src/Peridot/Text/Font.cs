@@ -15,8 +15,9 @@ namespace Peridot.Text
         {
             var settings = new FontSystemSettings
             {
-                Effect = FontSystemEffect.None,
-                EffectAmount = 2,
+                FontResolutionFactor = 2,
+                KernelWidth = 2,
+                KernelHeight = 2,
             };
             FontSystem = new FontSystem(settings);
         }
