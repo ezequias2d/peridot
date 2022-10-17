@@ -24,8 +24,6 @@ namespace Peridot
         private readonly ResourceSet m_viewSet;
         private DeviceBuffer m_buffer;
         private ResourceSet m_bufferSet;
-        private DeviceBuffer m_sliceBuffer;
-        private List<ResourceSet> m_sliceSets;
 
         private Dictionary<Texture, ResourceSet> m_textureSets;
 
@@ -45,7 +43,6 @@ namespace Peridot
             m_vertexBuffer = CreateVertexBuffer(m_device);
             m_resourceLayouts = CreateResourceLayouts(m_device);
             m_textureSets = new();
-            m_sliceSets = new();
 
             var bs = blendState;
             var ds = depthStencil;
@@ -68,7 +65,7 @@ namespace Peridot
 
             m_batcher.Build(m_sortMode);
             var (buffer, bufferSet) = GetBuffer(m_batcher.Items.Length);
-            var sliceBuffer = GetSliceBuffer(m_batcher.Slices.Length);
+            var itemSize = MemUtil.SizeOf<BatchItem>();
 
             var mapped = m_device.Map(m_viewBuffer, MapMode.Write);
             MemUtil.Set(mapped.Data, ViewMatrix, 1);
@@ -78,26 +75,15 @@ namespace Peridot
             MemUtil.Copy(mapped.Data, m_batcher.Items);
             m_device.Unmap(buffer);
 
-            mapped = m_device.Map(sliceBuffer, MapMode.Write);
-            var sliceAlignment = CalculateUboAlignment<Batcher<Texture>.Slice>();
-            for (var it = 0; it < m_batcher.Slices.Length; ++it)
-                MemUtil.Copy(mapped.Data + (int)(it * sliceAlignment), m_batcher.Slices[it]);
-            m_device.Unmap(sliceBuffer);
-
-            var i = 0;
-            foreach (var pair in m_batcher)
+            foreach (var slice in m_batcher.Slices)
             {
-                var texture = pair.Key;
-                var slice = pair.Slice;
-
-                var textureSet = GetTextureSet(texture);
-                var sliceSet = GetSliceSet(i++);
+                var textureSet = GetTextureSet(slice.Texture);
 
                 commandList.SetVertexBuffer(0, m_vertexBuffer);
-                commandList.SetGraphicsResourceSet(0, bufferSet);
+                uint offset = (uint)slice.Start * itemSize;
+                commandList.SetGraphicsResourceSet(0, bufferSet, 1, ref offset);
                 commandList.SetGraphicsResourceSet(1, textureSet);
                 commandList.SetGraphicsResourceSet(2, m_viewSet);
-                commandList.SetGraphicsResourceSet(3, sliceSet);
                 commandList.Draw(4, (uint)slice.Length, 0, 0);
             }
         }
@@ -123,18 +109,6 @@ namespace Peridot
             return (m_buffer, m_bufferSet);
         }
 
-        internal uint CalculateUboAlignment<T>() where T : unmanaged
-        {
-            var minUbo = m_device.UniformBufferMinOffsetAlignment;
-
-            var alignment = MemUtil.SizeOf<T>();
-            if (minUbo > 0)
-            {
-                alignment = (alignment + minUbo - 1) & ~(minUbo - 1);
-            }
-            return alignment;
-        }
-
         internal uint CalculateStructuredAlignment<T>() where T : unmanaged
         {
             var minUbo = m_device.StructuredBufferMinOffsetAlignment;
@@ -145,43 +119,6 @@ namespace Peridot
                 alignment = (alignment + minUbo - 1) & ~(minUbo - 1);
             }
             return alignment;
-        }
-
-        internal DeviceBuffer GetSliceBuffer(int count)
-        {
-            var alignment = CalculateStructuredAlignment<Batcher<Texture>.Slice>();
-            //var structSize = MemUtil.SizeOf<Batcher<Texture>.Slice>();
-            var size = ((count + 63) & (~63)) * alignment;
-
-            var bci = new BufferDescription((uint)size, BufferUsage.UniformBuffer | BufferUsage.Dynamic);
-
-            if (m_sliceBuffer == null || m_sliceBuffer.SizeInBytes < size)
-            {
-                if (m_sliceBuffer != null)
-                {
-                    m_sliceBuffer.Dispose();
-                    foreach (var sliceSet in m_sliceSets)
-                        sliceSet.Dispose();
-                    m_sliceSets.Clear();
-                }
-                m_sliceBuffer = m_device.ResourceFactory.CreateBuffer(bci);
-                m_sliceBuffer.Name = "SliceBuffer";
-            }
-
-            return m_sliceBuffer;
-        }
-
-        internal ResourceSet GetSliceSet(int index)
-        {
-            if (index >= m_sliceSets.Count)
-            {
-                var alignment = CalculateStructuredAlignment<Batcher<Texture>.Slice>();
-                var structSize = MemUtil.SizeOf<Batcher<Texture>.Slice>();
-                var offset = alignment * (uint)index;
-                m_sliceSets.Add(m_device.ResourceFactory.CreateResourceSet(
-                    new ResourceSetDescription(m_resourceLayouts[3], new DeviceBufferRange(m_sliceBuffer, offset, structSize))));
-            }
-            return m_sliceSets[index];
         }
 
         internal ResourceSet GetTextureSet(Texture t)
@@ -232,11 +169,11 @@ namespace Peridot
 
         private static ResourceLayout[] CreateResourceLayouts(GraphicsDevice device)
         {
-            var layouts = new ResourceLayout[4];
+            var layouts = new ResourceLayout[3];
 
             var elements = new ResourceLayoutElementDescription[]
             {
-                new("Items", ResourceKind.StructuredBufferReadOnly, ShaderStages.Vertex),
+                new("Items", ResourceKind.StructuredBufferReadOnly, ShaderStages.Vertex, ResourceLayoutElementOptions.DynamicBinding),
             };
             var rld = new ResourceLayoutDescription(elements);
             layouts[0] = device.ResourceFactory.CreateResourceLayout(rld);
@@ -255,13 +192,6 @@ namespace Peridot
             };
             rld = new ResourceLayoutDescription(elements);
             layouts[2] = device.ResourceFactory.CreateResourceLayout(rld);
-
-            elements = new ResourceLayoutElementDescription[]
-            {
-                new("Slice", ResourceKind.UniformBuffer, ShaderStages.Vertex)
-            };
-            rld = new ResourceLayoutDescription(elements);
-            layouts[3] = device.ResourceFactory.CreateResourceLayout(rld);
 
             return layouts;
         }

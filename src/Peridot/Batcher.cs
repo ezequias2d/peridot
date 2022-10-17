@@ -78,7 +78,7 @@ public class Batcher<TTexture> where TTexture : notnull
                     var newSize = (lastSize + lastSize / 2 + 7) & (~7);
                     Array.Resize(ref _slices, newSize);
                 }
-                _slices[_slicesCount++] = new(start, index - start);
+                _slices[_slicesCount++] = new(currentTexture, start, index - start);
                 Debug.Assert(index - start >= 0);
                 start = index;
                 currentTexture = texture;
@@ -87,18 +87,21 @@ public class Batcher<TTexture> where TTexture : notnull
         }
         while (index < _count);
 
-        if (_slicesCount >= _slices.Length)
+        if (index - start != 0)
         {
-            var lastSize = _slices.Length;
-            var newSize = (lastSize + lastSize / 2 + 7) & (~7);
-            Array.Resize(ref _slices, newSize);
+            if (_slicesCount >= _slices.Length)
+            {
+                var lastSize = _slices.Length;
+                var newSize = (lastSize + lastSize / 2 + 7) & (~7);
+                Array.Resize(ref _slices, newSize);
+            }
+            _slices[_slicesCount++] = new(currentTexture, start, index - start);
         }
-        _slices[_slicesCount++] = new(start, index - start);
+        int a = 0;
     }
 
     public ReadOnlySpan<BatchItem> Items => new ReadOnlySpan<BatchItem>(_items, 0, _count);
     public ReadOnlySpan<Slice> Slices => new ReadOnlySpan<Slice>(_slices, 0, _slicesCount);
-    public Enumerator GetEnumerator() => new Enumerator(_textures, _slices, _slicesCount);
     public TTexture GetSliceTexture(Slice slice)
     {
         return _textures[slice.Start];
@@ -127,11 +130,14 @@ public class Batcher<TTexture> where TTexture : notnull
 
     public struct Slice : IEquatable<Slice>
     {
-        public Slice(int start, int length)
+        public Slice(TTexture texture, int start, int length)
         {
+            Texture = texture;
             Start = start;
             Length = length;
         }
+
+        public readonly TTexture Texture;
         public readonly int Start;
         public readonly int Length;
 
@@ -149,45 +155,6 @@ public class Batcher<TTexture> where TTexture : notnull
         {
             return Start == other.Start &&
                 Length == other.Length;
-        }
-    }
-
-    public struct Enumerator
-    {
-        private readonly TTexture[] _textures;
-        private Slice[] _slices;
-        private int _slicesCount;
-        private int _index;
-
-        internal Enumerator(TTexture[] textures, Slice[] slices, int count)
-        {
-            _textures = textures;
-            _slices = slices;
-            _slicesCount = count;
-            _index = -1;
-        }
-
-        public (TTexture Key, Slice Slice) Current
-        {
-            get
-            {
-                var slice = _slices[_index];
-                var texture = _textures[slice.Start];
-                return (texture, slice);
-            }
-        }
-
-        public bool MoveNext()
-        {
-            if (_index >= _slicesCount)
-                return false;
-            _index++;
-            return true;
-        }
-
-        public void Reset()
-        {
-            _index = -1;
         }
     }
 }
