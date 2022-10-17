@@ -18,14 +18,6 @@ struct Item
     vec4 scissor;
 };
 
-struct Slice 
-{
-    int start;
-    int end;
-    int reserved1;
-    int reserved2;
-};
-
 layout(std430, set = 0, binding = 0) readonly buffer Items
 {
     Item items[];
@@ -36,11 +28,6 @@ layout(std140, set = 2, binding = 0) uniform View
     mat4 view;
 };
 
-layout(std140, set = 3, binding = 0) uniform Slices
-{
-    Slice slice;
-};
-
 mat2 makeRotation(float angle)
 {
     float c = cos(angle);
@@ -49,7 +36,7 @@ mat2 makeRotation(float angle)
 }
 
 void main() {
-    Item item = items[slice.start + gl_InstanceIndex];
+    Item item = items[gl_InstanceIndex];
 
     float angle = item.location.w;
     pos = Position * item.scale;
