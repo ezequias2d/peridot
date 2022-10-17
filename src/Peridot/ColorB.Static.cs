@@ -232,9 +232,13 @@ public partial struct ColorB
     #endregion
     #region Colors
     /// <summary>
-    /// Red (1, 0, 0, 1)
+    /// Red (255, 0, 0, 255)
     /// </summary>
     public static readonly ColorB Red = new(255, 0, 0, 255);
+
+    /// <summary>
+    /// Transparent (0, 0, 0, 0)
+    /// </summary>
     public static readonly ColorB Transparent = new(0, 0, 0, 0);
 
     /// <summary>

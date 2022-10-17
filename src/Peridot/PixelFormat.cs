@@ -5,6 +5,9 @@ namespace Peridot;
 /// </summary>
 public enum PixelFormat
 {
+    /// <summary>
+    /// Undefined format.
+    /// </summary>
     Undefined,
     /// <summary>
     /// One-channel, byte storage.

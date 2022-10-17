@@ -16,11 +16,23 @@ public interface Image : IDisposable
     public bool IsDisposed { get; }
 
     /// <summary>
-    /// The total size of the texture.
+    /// Image size.
     /// </summary>
     public Size Size { get; }
+
+    /// <summary>
+    /// Pixel format.
+    /// </summary>
+    /// <value></value>
     public PixelFormat Format { get; }
 
+    /// <summary>
+    /// Image width.
+    /// </summary>
     public int Width => Size.Width;
+
+    /// <summary>
+    /// Image height.
+    /// </summary>
     public int Height => Size.Height;
 }

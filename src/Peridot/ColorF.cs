@@ -61,17 +61,21 @@ public partial struct ColorF : IEquatable<ColorF>
     /// </summary>
     public float A { get => m_rgba.W; set => m_rgba.W = value; }
 
+    /// <summary>
+    /// Gets or sets components RGBA as a <see cref="Vector4"/>.
+    /// </summary>
     public Vector4 AsVector { get => m_rgba; set => m_rgba = value; }
 
+    /// <inheritdoc/>
     public bool Equals(ColorF other)
     {
         return m_rgba.Equals(other.m_rgba);
     }
 
     /// <inheritdoc/>
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        return obj is ColorF other && Equals(other);
+        return obj != null && obj is ColorF other && Equals(other);
     }
 
     /// <inheritdoc/>

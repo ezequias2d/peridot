@@ -59,15 +59,16 @@ public partial struct ColorB : IEquatable<ColorB>
     /// </summary>
     public byte A;
 
+    /// <inheritdoc/>
     public bool Equals(ColorB other)
     {
         return (R, G, B, A) == (other.R, other.G, other.B, other.A);
     }
 
     /// <inheritdoc/>
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        return obj is ColorB other && Equals(other);
+        return obj != null && obj is ColorB other && Equals(other);
     }
 
     /// <inheritdoc/>

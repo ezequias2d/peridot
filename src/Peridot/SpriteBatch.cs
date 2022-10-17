@@ -10,7 +10,7 @@ namespace Peridot;
 /// A class for drawing sprites in one or more optimized batches.
 /// </summary>
 /// <typeparam name="TImage">The image type to renderer.</typeparam>
-public abstract class SpriteBatch<TImage> : ISpriteBatch<TImage>
+public abstract class SpriteBatch<TImage> : ISpriteBatch<TImage> where TImage : notnull
 {
     /// <summary>
     /// The batcher with all entities to renderer.
