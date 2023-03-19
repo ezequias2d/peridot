@@ -31,6 +31,15 @@ public partial struct ColorF
         color = Vector4.Clamp(color, Vector4.Zero, Vector4.One) * 255f;
         return Color.FromArgb((byte)color.A, (byte)color.R, (byte)color.G, (byte)color.B);
     }
+
+    /// <summary>
+    /// Cast a <see cref="Vector4"/> to <see cref="ColorF"/>.
+    /// </summary>
+    /// <param name="color"></param>
+    public static implicit operator ColorF(Color color)
+    {
+        return (ColorF)Vector4.Clamp(new Vector4(color.R, color.G, color.B, color.A) * (1f / 255f), Vector4.Zero, Vector4.One);
+    }
     #endregion
     #region Math
     /// <summary>
