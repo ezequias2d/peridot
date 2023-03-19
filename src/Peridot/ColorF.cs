@@ -42,6 +42,25 @@ public partial struct ColorF : IEquatable<ColorF>
     }
 
     /// <summary>
+    /// Constructs a new gray color.
+    /// </summary>
+    /// <param name="grayColor"></param>
+    public ColorF(float grayColor)
+    {
+        m_rgba = new Vector4(grayColor, grayColor, grayColor, 1f);
+    }
+
+    /// <summary>
+    /// Constructs a new gray color.
+    /// </summary>
+    /// <param name="grayColor"></param>
+    /// <param name="alpha"></param>
+    public ColorF(float grayColor, float alpha)
+    {
+        m_rgba = new Vector4(grayColor, grayColor, grayColor, alpha);
+    }
+
+    /// <summary>
     /// The red color component.
     /// </summary>
     public float R { get => m_rgba.X; set => m_rgba.X = value; }
