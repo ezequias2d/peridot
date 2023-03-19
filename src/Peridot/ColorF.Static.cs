@@ -23,7 +23,7 @@ public partial struct ColorF
     public static implicit operator ColorF(Vector4 color) => new(color);
 
     /// <summary>
-    /// Cast a <see cref="Vector4"/> to <see cref="ColorF"/>.
+    /// Cast a <see cref="ColorF"/> to <see cref="Color"/>.
     /// </summary>
     /// <param name="color"></param>
     public static implicit operator Color(ColorF color)
@@ -42,6 +42,16 @@ public partial struct ColorF
     }
     #endregion
     #region Math
+
+    public static ColorF Blend(ColorF dst, ColorF src)
+    {
+        var dstA = dst.A;
+        var srcA = src.A;
+        var res = dst * (1 - srcA) + src * srcA;
+        res.A = dstA * (1 - srcA) + srcA;
+        return res;
+    }
+
     /// <summary>
     /// Negates the specified color.
     /// </summary>
