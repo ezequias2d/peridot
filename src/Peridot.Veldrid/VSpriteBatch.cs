@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2021 ezequias2d <ezequiasmoises@gmail.com> and the Peridot contributors
+// Copyright (c) 2021 ezequias2d <ezequiasmoises@gmail.com> and the Peridot contributors
 // This code is licensed under MIT license (see LICENSE for details)
 
 using Ez.Memory;
@@ -47,18 +47,24 @@ namespace Peridot
 		/// <param name="commandList"></param>
 		public void DrawBatch(CommandList commandList)
 		{
-			var matrixSize = (int)MemUtil.SizeOf<Matrix4x4>();
+			var matrixSize = MemUtil.SizeOf<Matrix4x4>();
 			commandList.SetPipeline(m_pipeline);
 			foreach (var item in m_batcher)
 			{
 				var texture = item.Key;
 				var group = item.Value;
 
-				var pair = GetBuffer(texture, group.Count + matrixSize);
+				var structSize = MemUtil.SizeOf<BatchItem>();
+
+				// align count to 64 items
+				var count = (((uint)group.Count + 63u) & (~63u));
+				var size = count * structSize + matrixSize;
+
+				var pair = GetBuffer(texture, size);
 				var mapped = m_device.Map(pair.buffer, MapMode.Write);
 
 				MemUtil.Set(mapped.Data, ViewMatrix, 1);
-				MemUtil.Copy(mapped.Data + matrixSize, group.GetSpan());
+				MemUtil.Copy(mapped.Data + (int)matrixSize, group.GetSpan());
 
 				m_device.Unmap(pair.buffer);
 
@@ -69,12 +75,10 @@ namespace Peridot
 			}
 		}
 
-		internal (DeviceBuffer buffer, ResourceSet set, ResourceSet textureSet) GetBuffer(Texture t, int count)
+		internal (DeviceBuffer buffer, ResourceSet set, ResourceSet textureSet) GetBuffer(Texture t, uint bufferSize)
 		{
 			var texture = t as Texture;
-			var structSize = MemUtil.SizeOf<BatchItem>();
-			var size = ((count + 63) & (~63)) * structSize;
-			var bci = new BufferDescription((uint)size, BufferUsage.StructuredBufferReadOnly | BufferUsage.Dynamic, structSize);
+			var bci = new BufferDescription(bufferSize, BufferUsage.StructuredBufferReadOnly | BufferUsage.Dynamic, bufferSize);
 
 			if (!m_buffers.TryGetValue(texture, out var pair))
 			{
@@ -83,7 +87,7 @@ namespace Peridot
 				pair.textureSet = m_device.ResourceFactory.CreateResourceSet(new ResourceSetDescription(m_resourceLayouts[1], texture, m_sampler));
 				m_buffers[texture] = pair;
 			}
-			else if (size > pair.buffer.SizeInBytes)
+			else if (bufferSize > pair.buffer.SizeInBytes)
 			{
 				pair.set.Dispose();
 				pair.buffer.Dispose();
